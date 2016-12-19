@@ -34,10 +34,7 @@ public class RegistroOrden {
 	   private Event<Orden> ordenEventSrc;
 
 	   private Orden newOrden;
-	   
-	   @Inject
-	   private RegistroEstado re;
-	   
+	   	   
 	   @Inject
 	   private OrdenListProducer olp;
 	   
@@ -55,7 +52,7 @@ public class RegistroOrden {
 	      Cliente cliente = new Cliente();
 	      cliente = newOrden.getCliente();
 	      Estado estado = new Estado();
-	      estado = re.buscar((long) 1);
+	      estado = newOrden.getEstado();
 	      newOrden.setEstado(estado);
 	      newOrden.setCliente(cliente);
 	      em.persist(newOrden);

@@ -15,7 +15,6 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 import uy.com.workflow.ordenes.controller.RegistroOrden;
-import uy.com.workflow.ordenes.data.EstadoListProducer;
 import uy.com.workflow.ordenes.model.Estado;
 import uy.com.workflow.ordenes.model.Orden;
 
@@ -38,6 +37,10 @@ public class OrdenBean {
 	private List<Orden> ordenesFiltradas;
 	
 	private List<String> EstadosString = new ArrayList<String>();
+	
+	private boolean mostrarTabOrden = false;
+	
+	private boolean mostrarTabTarea = false;
 
 	public Orden getOrdenSeleccionada() {
 		return ordenSeleccionada;
@@ -88,6 +91,22 @@ public class OrdenBean {
 	
 	public void setEstadosString(List<String> estados){
 		EstadosString = estados;
+	}
+
+	public boolean isMostrarTabOrden() {
+		return mostrarTabOrden;
+	}
+
+	public void setMostrarTabOrden(boolean mostrarTabOrden) {
+		this.mostrarTabOrden = mostrarTabOrden;
+	}
+
+	public boolean isMostrarTabTarea() {
+		return mostrarTabTarea;
+	}
+
+	public void setMostrarTabTarea(boolean mostrarTabTarea) {
+		this.mostrarTabTarea = mostrarTabTarea;
 	}
 
 	public void registrar() {
@@ -167,6 +186,8 @@ public class OrdenBean {
         Long idOrden = ((Orden) event.getObject()).getId();
         Long idCli = ((Orden) event.getObject()).getCliente().getId();
         generearListaOrdenesDisponibles(idOrden, idCli);
+        setMostrarTabOrden(true);
+        setMostrarTabTarea(true);
     }
 
 	

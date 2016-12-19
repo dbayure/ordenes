@@ -44,7 +44,16 @@
         			<p:calendar id="fini" value="#{newOrden.fechaInicio}" />
 					<label>Fecha Entrega: </label>
 					<p:calendar id="ffin" value="#{newOrden.fechaEntrega}" />
-				
+					
+					<label>Estado: </label>
+					<p:selectOneMenu id="estado" value="#{newOrden.estado}"
+						required="true"	requiredMessage="Debe ingresar un valor para el estado"
+						style="vertical-align:middle;">
+						<f:converter converterId="estadoConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+					</p:selectOneMenu>
+					
 					<label></label>
 					<p:commandButton id="register" action="#{ordenBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
 					
@@ -63,14 +72,10 @@
    
 				<f:facet name="header">
 					<p class="text-muted">Administrar Ordenes</p>
-					<p:outputPanel>
-                		<h:outputText value="Buscar en todos los campos:" />
-                		<p:inputText id="globalFilter" onkeyup="PF('ordCreadas').filter()" style="width:150px" placeholder="Ingresar búsqueda"/>
-            		</p:outputPanel>
 				</f:facet>
 
 				<p:ajax event="cellEdit" listener="#{ordenBean.onCellEdit}" update=":form:messages" />
-				<p:ajax event="rowSelect" listener="#{ordenBean.onRowSelect}" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred" />
+				<p:ajax event="rowSelect" listener="#{ordenBean.onRowSelect}" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred :form:tabOrden :form:tabOrden" />
 				
 				<p:column headerText="Id" style="width:15%;" sortBy="#{_orden.id}" filterBy="#{_orden.id}" filterMatchMode="exact">
 					<h:outputText value="#{_orden.id}" />
@@ -88,9 +93,7 @@
 							<h:outputText value="#{_orden.estado.nombre}" />
 						</f:facet>
             			<f:facet name="input">
-							<p:selectOneMenu value="#{_orden.estado.nombre}" >
-								<f:converter converterId="estadoConverter" />
-								<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<p:selectOneMenu value="#{_orden.estado}" converter="estadoConverter">
 								<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
 							</p:selectOneMenu>
 						</f:facet>
@@ -109,6 +112,7 @@
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
+				
 				<p:column headerText="Cliente" filterBy="#{_orden.cliente.nombre}" filterMatchMode="contains">
 					<p:cellEditor>
 						<f:facet name="output">
@@ -148,13 +152,6 @@
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
-
-				<p:column headerText="Eliminar" >
-					<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" 
-									 value="Eliminar" actionListener="#{ordenBean.eliminar(_orden.id)}">
-						<p:confirm header="Confirmación" message="Esta seguro que desea eliminar la orden" icon="ui-icon-alert" />
-					</p:commandButton>
-				</p:column>
 		        
 			</p:dataTable>
 			
@@ -163,7 +160,7 @@
 			<br />
 			<br />			
 			 <p:tabView id="tabOrden">
-		        <p:tab title="Definir precedencia de órdenes">
+		        <p:tab title="Definir precedencia de órdenes" rendered="#{ordenBean.mostrarTabOrden}">
 		        	<p:dataTable id="ordDisp" var="_ordenDisp" value="#{ordenBean.ordenesDisponibles}" selection="#{ordenBean.ordenesSeleccionadas}"
 									 emptyMessage="No existen datos a mostrar." rows="10" editable="true" 
 									 style="text-align: center;" reflow="true" rowKey="#{_ordenDisp.id}">
@@ -230,7 +227,7 @@
 					        
 					    </p:dataTable>
 		        </p:tab>
-		        <p:tab title="Agregar tareas a una orden">
+		        <p:tab title="Agregar tareas a una orden" rendered="#{ordenBean.mostrarTabTarea}">
 		          
 		        </p:tab>
 		       
