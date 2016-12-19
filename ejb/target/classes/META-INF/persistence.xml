@@ -23,13 +23,12 @@
    <persistence-unit name="primary">
       <!-- If you are running in a production environment, add a managed 
          data source, this example data source is just for development and testing! -->
-      <!-- The datasource is deployed as <EAR>/META-INF/ordenes-ds.xml, you
-         can find it in the source at ear/src/main/application/META-INF/ordenes-ds.xml -->
       <jta-data-source>java:jboss/datasources/ordenesDS</jta-data-source>
       <properties>
          <!-- Properties for Hibernate -->
-         <property name="hibernate.hbm2ddl.auto" value="create" />
+         <property name="hibernate.hbm2ddl.auto" value="update" />
          <property name="hibernate.show_sql" value="false" />
+         <property name="hibernate.enable_lazy_load_no_trans" value="true" />
       </properties>
    </persistence-unit>
 </persistence>

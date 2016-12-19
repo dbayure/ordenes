@@ -28,6 +28,8 @@ public class Puesto implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 		
+	private String nombre;
+	
 	private String descripcion;
 	
 	@OneToMany(mappedBy="puesto", cascade={CascadeType.ALL})
@@ -53,6 +55,14 @@ public class Puesto implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getDescripcion() {
@@ -94,6 +104,7 @@ public class Puesto implements Serializable {
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((logsPuesto == null) ? 0 : logsPuesto.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((tareas == null) ? 0 : tareas.hashCode());
 		result = prime * result + ((usuarios == null) ? 0 : usuarios.hashCode());
 		return result;
@@ -122,6 +133,11 @@ public class Puesto implements Serializable {
 			if (other.logsPuesto != null)
 				return false;
 		} else if (!logsPuesto.equals(other.logsPuesto))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
 			return false;
 		if (tareas == null) {
 			if (other.tareas != null)

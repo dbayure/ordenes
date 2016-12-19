@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:form id="form" prependId="false">
+			<h3 class="text-muted">Administrar Ordenes</h3>
+			<hr color="blue" style="height: 30px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+
+			<div class="ui-fluid">
+			
+				<p:panelGrid columns="4" layout="grid" 
+							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+							 styleClass="ui-panelgrid-blank">
+					
+					<label>Detalle: </label>
+					<p:inputText id="nombre" value="#{newOrden.detalle}" label="nombre"
+						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
+						autocomplete="false" />
+					
+					<label>Cliente: </label>
+					<p:selectOneMenu id="cliente" value="#{newOrden.cliente}"
+						required="true"	requiredMessage="Debe ingresar un valor para el cliente"
+						style="vertical-align:middle;">
+						<f:converter converterId="clienteConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{clientes}" var="_cli" itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
+					</p:selectOneMenu>
+					
+					<label>Fecha Inicio: </label>
+        			<p:calendar id="fini" value="#{newOrden.fechaInicio}" />
+					<label>Fecha Entrega: </label>
+					<p:calendar id="ffin" value="#{newOrden.fechaEntrega}" />
+				
+					<label></label>
+					<p:commandButton id="register" action="#{ordenBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
+					
+				</p:panelGrid>
+				
+				<p:panelGrid columns="1" layout="grid" columnClasses="ui-grid-col-2" styleClass="ui-panelgrid-blank">
+				</p:panelGrid>
+				
+			</div>
+
+			<hr color="blue" style="height: 30px" />
+
+			<p:dataTable id="ordenes" var="_orden" value="#{ordenes}" style="text-align:center" rows="10" paginator="true" rowKey="#{_orden.id}"
+				emptyMessage="No existen datos a mostrar." editable="true" editMode="cell" reflow="true" rowIndexVar="#{_orden.id}"
+				selectionMode="single" selection="#{ordenBean.ordenSeleccionada}" filteredValue="#{ordenBean.ordenesFiltradas}" widgetVar="ordCreadas">
+   
+				<f:facet name="header">
+					<p class="text-muted">Administrar Ordenes</p>
+					<p:outputPanel>
+                		<h:outputText value="Buscar en todos los campos:" />
+                		<p:inputText id="globalFilter" onkeyup="PF('ordCreadas').filter()" style="width:150px" placeholder="Ingresar búsqueda"/>
+            		</p:outputPanel>
+				</f:facet>
+
+				<p:ajax event="cellEdit" listener="#{ordenBean.onCellEdit}" update=":form:messages" />
+				<p:ajax event="rowSelect" listener="#{ordenBean.onRowSelect}" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred" />
+				
+				<p:column headerText="Id" style="width:15%;" sortBy="#{_orden.id}" filterBy="#{_orden.id}" filterMatchMode="exact">
+					<h:outputText value="#{_orden.id}" />
+				</p:column>
+				
+				<p:column headerText="Estado" sortBy="#{_orden.estado.nombre}" filterBy="#{_orden.estado.nombre}" filterMatchMode="equals">
+					<p:cellEditor>
+						<f:facet name="filter">
+	                		<p:selectOneMenu onchange="PF('ordCreadas').filter()" >
+	                    		<f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true" />
+	                    		<f:selectItems value="#{ordenBean.estadosString}" />
+	                		</p:selectOneMenu>
+	            		</f:facet>
+	            		<f:facet name="output">
+							<h:outputText value="#{_orden.estado.nombre}" />
+						</f:facet>
+            			<f:facet name="input">
+							<p:selectOneMenu value="#{_orden.estado.nombre}" >
+								<f:converter converterId="estadoConverter" />
+								<f:selectItem itemLabel="Seleccione..." itemValue="" />
+								<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Detalle">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_orden.detalle}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="modelInputSaber" value="#{_orden.detalle}"
+								style="width:96%" required="true"
+								requiredMessage="Debe ingresar un valor para el detalle" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Cliente" filterBy="#{_orden.cliente.nombre}" filterMatchMode="contains">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_orden.cliente.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu value="#{_orden.cliente}" converter="clienteConverter">
+								<f:selectItems value="#{clientes}" var="_cli"
+									itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Fecha Inicio"	sortBy="#{_orden.fechaInicio}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_orden.fechaInicio}" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>								
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar id="fin" value="#{newOrden.fechaInicio}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Fecha Fin" sortBy="#{_orden.fechaEntrega}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_orden.fechaEntrega}" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar id="fen" value="#{newOrden.fechaEntrega}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Eliminar" >
+					<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" 
+									 value="Eliminar" actionListener="#{ordenBean.eliminar(_orden.id)}">
+						<p:confirm header="Confirmación" message="Esta seguro que desea eliminar la orden" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+		        
+			</p:dataTable>
+			
+			<br />
+			<br />
+			<br />
+			<br />			
+			 <p:tabView id="tabOrden">
+		        <p:tab title="Definir precedencia de órdenes">
+		        	<p:dataTable id="ordDisp" var="_ordenDisp" value="#{ordenBean.ordenesDisponibles}" selection="#{ordenBean.ordenesSeleccionadas}"
+									 emptyMessage="No existen datos a mostrar." rows="10" editable="true" 
+									 style="text-align: center;" reflow="true" rowKey="#{_ordenDisp.id}">
+							
+							<f:facet name="header">		 
+					           <p class="text-muted"> Ordenes disponibles</p>
+					        </f:facet>
+					        
+					        <p:column width="50" selectionMode="multiple" />
+					        
+					        <p:column headerText="Id">
+					            <h:outputText value="#{_ordenDisp.id}" />
+					        </p:column>
+					        
+					        <p:column headerText="Descripción">
+					            <h:outputText value="#{_ordenDisp.detalle}" />
+					        </p:column>
+					        
+					        <p:column headerText="Cliente">
+					            <h:outputText value="#{_ordenDisp.cliente.nombre}" />
+					        </p:column>
+					       
+					        <p:column headerText="Estado">
+					            <h:outputText value="#{_ordenDisp.estado.descripcion}" />
+					        </p:column>
+					        
+					        <f:facet name="footer">
+            					<p:commandButton process="ordDisp" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred" icon="ui-icon-search" value="Agregar" 
+            								     action="#{ordenBean.agregarOrdenesPredecesoras()}" />
+        					</f:facet>
+					        
+					    </p:dataTable>
+					    
+					    <p:dataTable id="ordPred" var="_ordenPred" value="#{ordenBean.ordenSeleccionada.ordenesPredecesoras}" selection="#{ordenBean.ordenesSeleccionadasQuitar}"
+									 emptyMessage="No existen datos a mostrar." rows="10" editable="true" 
+									 style="text-align: center;" reflow="true" rowKey="#{_ordenPred.id}">
+							
+							<f:facet name="header">		 
+					           <p class="text-muted"> Ordenes predecesoras</p>
+					        </f:facet>
+					        	
+					        <p:column width="50" selectionMode="multiple" />
+					        				        
+					        <p:column headerText="Id">
+					            <h:outputText value="#{_ordenPred.id}" />
+					        </p:column>
+					        
+					        <p:column headerText="Descripción">
+					            <h:outputText value="#{_ordenPred.detalle}" />
+					        </p:column>
+					        
+					        <p:column headerText="Cliente">
+					            <h:outputText value="#{_ordenPred.cliente.nombre}" />
+					        </p:column>
+					       
+					        <p:column headerText="Estado">
+					            <h:outputText value="#{_ordenPred.estado.descripcion}" />
+					        </p:column>			
+					        
+					        <f:facet name="footer">
+            					<p:commandButton process="ordPred" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred" icon="ui-icon-search" value="Quitar" 
+            								     action="#{ordenBean.quitarOrdenesPredecesoras()}" />
+        					</f:facet>		     
+					        
+					    </p:dataTable>
+		        </p:tab>
+		        <p:tab title="Agregar tareas a una orden">
+		          
+		        </p:tab>
+		       
+    		</p:tabView>
+		
+		</h:form>
+		
+		<br />
+		<br />
+		<br />
+			<hr color="blue" style="height: 30px" />
+		<br />
+	
+	</ui:define>
+</ui:composition>

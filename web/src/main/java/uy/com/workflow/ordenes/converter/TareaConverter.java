@@ -15,10 +15,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import uy.com.workflow.ordenes.model.Tarea;
 
 
-@FacesConverter(forClass = Tarea.class, value = "TareaConverter")
+@FacesConverter(forClass = Tarea.class, value = "tareaConverter")
 public class TareaConverter implements Converter {
 
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+		System.out.println("Valor que viene para convertir en tareaconverter : " + value);
 		if (value.trim().equals("")) {
 			value = ((HttpServletRequest) context.getExternalContext().getRequest()).getParameter(component.getClientId()+"_input");
 //			return null;
@@ -28,10 +29,11 @@ public class TareaConverter implements Converter {
 			ObjectMapper mapper = new ObjectMapper();	
 			Tarea = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/Tareas/" + value), Tarea.class);
+					+ "/rest/tareas/" + value), Tarea.class);
 		}
 		catch(Exception e) {
-			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Tarea no válido"));
+			e.printStackTrace();
+//			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Tarea no válido"));
 		}
 		return Tarea;
 	}

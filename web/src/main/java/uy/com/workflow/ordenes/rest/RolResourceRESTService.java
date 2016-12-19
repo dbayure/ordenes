@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import uy.com.workflow.ordenes.data.RolListProducer;
 import uy.com.workflow.ordenes.model.Rol;
 
 /**
@@ -22,6 +23,9 @@ public class RolResourceRESTService {
 	
    @Inject
    private EntityManager em;
+   
+   @Inject
+   private RolListProducer roles;
 
    @GET
    @Produces("application/json")
@@ -33,7 +37,7 @@ public class RolResourceRESTService {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<Rol> results = em.createQuery("select c from Rol c order by c.id").getResultList();
+      final List<Rol> results = roles.getRoles();
       return results;
    }
 

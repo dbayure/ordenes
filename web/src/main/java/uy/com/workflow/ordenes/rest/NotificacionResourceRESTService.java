@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import uy.com.workflow.ordenes.data.NotificacionListProducer;
 import uy.com.workflow.ordenes.model.Notificacion;
 
 
@@ -24,6 +25,9 @@ public class NotificacionResourceRESTService {
 	
    @Inject
    private EntityManager em;
+   
+   @Inject
+   private NotificacionListProducer notificaciones;
 
    @GET
    @Produces("application/json")
@@ -35,7 +39,7 @@ public class NotificacionResourceRESTService {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<Notificacion> results = em.createQuery("select c from Notificacion c order by c.id").getResultList();
+      final List<Notificacion> results = notificaciones.getNotificaciones();
       return results;
    }
 

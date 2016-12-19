@@ -10,7 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import uy.com.workflow.ordenes.model.Estado;
+import uy.com.workflow.ordenes.data.EstadoNotificacionListProducer;
+import uy.com.workflow.ordenes.model.EstadoNotificacion;
 
 
 /**
@@ -18,16 +19,19 @@ import uy.com.workflow.ordenes.model.Estado;
  * 
  * This class produces a RESTful service to read the contents of the members table.
  */
-@Path("/estados")
+@Path("/estadosNotificacion")
 @RequestScoped
 public class EstadoNotificacionResourceRESTService {
 	
    @Inject
    private EntityManager em;
-
+   
+   @Inject
+   private EstadoNotificacionListProducer estadosNotificaciones;
+   
    @GET
    @Produces("application/json")
-   public List<Estado> listAll() {
+   public List<EstadoNotificacion> listAll() {
       // Use @SupressWarnings to force IDE to ignore warnings about "genericizing" the results of
       // this query
       @SuppressWarnings("unchecked")
@@ -35,14 +39,14 @@ public class EstadoNotificacionResourceRESTService {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<Estado> results = em.createQuery("select c from Estado c order by c.id").getResultList();
+      final List<EstadoNotificacion> results = estadosNotificaciones.getEstadoNotificaciones();
       return results;
    }
 
    @GET
    @Path("/{id:[0-9][0-9]*}")
    @Produces("application/json")
-   public Estado lookupById(@PathParam("id") long id) {
-      return em.find(Estado.class, id);
+   public EstadoNotificacion lookupById(@PathParam("id") long id) {
+      return em.find(EstadoNotificacion.class, id);
    }
 }

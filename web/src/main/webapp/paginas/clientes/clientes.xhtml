@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:form id="form" prependId="false">
+			<h3 class="text-muted">Administrar Clientes</h3>
+			<hr color="blue" style="height: 30px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+
+			<div class="ui-fluid">
+			
+				<p:panelGrid columns="4" layout="grid" 
+							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+							 styleClass="ui-panelgrid-blank">
+					
+					<label>Nombre: </label>
+					<p:inputText id="nombre" value="#{newCliente.nombre}" label="nombre"
+						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
+						autocomplete="false" />
+					
+					<label>Correo: </label>
+					<p:inputText id="correo" value="#{newCliente.correo}" label="correo"
+						required="true"	requiredMessage="Debe ingresar un valor para el correo"
+						autocomplete="false" />
+					
+					<label>Rut: </label>
+					<p:inputText id="rut" value="#{newCliente.rut}" label="rut"
+						required="true"	requiredMessage="Debe ingresar un valor para el rut"
+						autocomplete="false" />
+						
+					<label></label>
+					<p:commandButton id="register" action="#{clienteBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
+					</p:panelGrid>
+								
+			</div>
+
+			<hr color="blue" style="height: 30px" />
+
+			<p:dataTable id="clientes" var="_cliente" value="#{clientes}" style="text-align:center" rows="10" paginator="true"
+				emptyMessage="No existen datos a mostrar." editable="true" editMode="cell" reflow="true" >
+
+				<f:facet name="header">
+					<p class="text-muted">Administrar Clientes</p>
+				</f:facet>
+
+				<p:ajax event="cellEdit" listener="#{clienteBean.onCancel}" update=":form:messages" />
+
+				<p:column headerText="Id" style="width:10%; text-align: center;">
+					<h:outputText value="#{_cliente.id}" />
+				</p:column>
+
+				<p:column headerText="Nombre" style="text-align: center;">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_cliente.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="modelInputNombre" value="#{_cliente.nombre}" required="true"
+								requiredMessage="Debe ingresar un valor para el nombre" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Correo" style="text-align: center;">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_cliente.correo}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="modelInputCorreo" value="#{_cliente.correo}" required="true"
+								requiredMessage="Debe ingresar un valor para el correo" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Rut" style="text-align: center;">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{_cliente.rut}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="modelInputRut" value="#{_cliente.rut}" required="true"
+								requiredMessage="Debe ingresar un valor para el rut" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Eliminar" style="text-align: center;">
+					<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" 
+									 value="Eliminar" actionListener="#{clienteBean.eliminar(_cliente.id)}">
+						<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el cliente" icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+		        
+			</p:dataTable>
+			
+		</h:form>
+	
+	</ui:define>
+</ui:composition>

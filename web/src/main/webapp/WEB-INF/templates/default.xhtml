@@ -6,44 +6,33 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Plantilla</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<h:outputStylesheet name="css/screen.css" />
-	<h:outputStylesheet name="css/default.css" />
-	<h:outputStylesheet name="css/jsfcrud.css" />
-	<h:outputStylesheet name="css/tablas.css" />
-	<meta http-equiv="refresh" content="300;url=/ordenes-web/paginas/principal/principal.jsf" />
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta http-equiv="refresh"
+			content="3000;url=/ordenes-web/paginas/principal/principal.jsf" />
+		<title>Ordenes Workflow</title>
+	</f:facet>
+
+	<f:facet name="middle">
+		<h:outputStylesheet name="bootstrap/css/bootstrap.css" />
+
+		<h:outputStylesheet name="css/dashboard.css" />
+
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+
+		<h:outputScript name="bootstrap/js/bootstrap.js" />
+	</f:facet>
+
+    <f:facet name="last">
+        <h:outputStylesheet name="css/font-awesome.css" />
+    </f:facet>
+
 </h:head>
 <h:body>
-	<div id="container">
-		<div id="header">
-			<h:form prependId="false" id="fMenu">
-				<p:menubar autoDisplay="false">	
-				
-					<p:menuitem value="Inicio" url="/paginas/principal/principal.jsf" icon="ui-icon-home"/>
-					
-					<p:submenu label="Ayuda" icon="ui-icon-help">
-						<p:menuitem value="Ayuda" url="/paginas/ayuda/ayuda.jsf" />
-					</p:submenu>
-					
-					<f:facet name="options">
-						<h:outputText value="Usuario: #{request.remoteUser}" style="margin-right: 10px; font-weight:bold" />
-						<h:outputText value="Rol: #{personaBean.rol.descripcion}" style="margin-right: 10px; font-weight:bold" />
-						<p:commandButton ajax="false" value="Logout" icon="ui-icon-extlink" action="#{sessionBean.logout}" />
-					</f:facet>
-
-				</p:menubar>
-			</h:form>
-		</div>
-		<div id="content">
-			<ui:insert name="content">
-                    [Template content will be inserted here]
-          </ui:insert>
-		</div>
-		<div id="footer">
-			<h:graphicImage value="/resources/gfx/Footer.png" alt="Ordenes"
-				height="137px" />			
-		</div>
-	</div>
+	<ui:include src="header.xhtml" />
+	<ui:include src="content.xhtml" />
 </h:body>
 </html>

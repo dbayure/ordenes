@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import uy.com.workflow.ordenes.data.UsuarioListProducer;
 import uy.com.workflow.ordenes.model.Usuario;
 
 
@@ -24,6 +25,9 @@ public class UsuarioResourceRESTService {
 	
    @Inject
    private EntityManager em;
+   
+   @Inject
+   private UsuarioListProducer usuarios;
 
    @GET
    @Produces("application/json")
@@ -35,7 +39,7 @@ public class UsuarioResourceRESTService {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<Usuario> results = em.createQuery("select c from Usuario c order by c.id").getResultList();
+      final List<Usuario> results = usuarios.getUsuarios();
       return results;
    }
 

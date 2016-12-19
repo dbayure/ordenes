@@ -1,0 +1,15 @@
+.noBorders tr, .noBorders td {
+    background: green !important;
+    border: none !important;
+    border-bottom: none !important;
+    border-left: none !importatn;
+    border-right: none !important;
+    border-top: none !important;
+    border-style: none !important;
+    border-width: thin;
+};
+
+.textoCentrado {
+	text-align: center !important;
+	background: green !important;
+}

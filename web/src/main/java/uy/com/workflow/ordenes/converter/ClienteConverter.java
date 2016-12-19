@@ -31,6 +31,7 @@ public class ClienteConverter implements Converter {
 					+ "/rest/clientes/" + value), Cliente.class);
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Cliente no válido"));
 		}
 		return cliente;

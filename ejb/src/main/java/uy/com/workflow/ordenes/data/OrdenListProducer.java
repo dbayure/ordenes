@@ -24,13 +24,13 @@ public class OrdenListProducer {
    @Inject
    private EntityManager em;
 
-   private List<Orden> ordens;
+   private List<Orden> ordenes;
 
 
    @Produces
    @Named
-   public List<Orden> getOrdens() {
-      return ordens;
+   public List<Orden> getOrdenes() {
+      return ordenes;
    }
 
    public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Orden orden) {
@@ -43,6 +43,21 @@ public class OrdenListProducer {
       CriteriaQuery<Orden> criteria = cb.createQuery(Orden.class);
       Root<Orden> orden = criteria.from(Orden.class);
       criteria.select(orden).orderBy(cb.asc(orden.get("id")));
-      ordens = em.createQuery(criteria).getResultList();
+      ordenes = em.createQuery(criteria).getResultList();
+   }
+   
+   public List<Orden> obtenerOrdenesDisponiblesPorCliente(Long idOrden, Long idCli){
+	     CriteriaBuilder cb = em.getCriteriaBuilder();
+	     CriteriaQuery<Orden> criteria = cb.createQuery(Orden.class);
+	     Root<Orden> orden = criteria.from(Orden.class);
+	     criteria.select(orden);
+	     criteria.where(cb.and(cb.notEqual(orden.get("id"), idOrden)),
+	    		 			   cb.equal(orden.get("cliente"), idCli));
+         List<Orden> ordenes = em.createQuery(criteria).getResultList();
+         return ordenes;
+   }
+   
+   public Orden getOrdenById(Long idOrden){
+	   return em.find(Orden.class, idOrden);
    }
 }

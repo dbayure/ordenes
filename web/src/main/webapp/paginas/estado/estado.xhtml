@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+      <h1 style="text-align: center;">Administrar Estados</h1>
+	
+
+      <h:form id="form" prependId="false">
+      
+      	<p:growl id="msgs" showDetail="false" />
+			
+				
+		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		     <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		     </h:panelGrid>   
+		    </p:confirmDialog>
+         
+         <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
+
+		 <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	
+			<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	
+				<p:outputLabel for="nombre" value="Nombre:" style="font-weight:bold"/>
+				<p:inputText id="nombre" value="#{newEstado.nombre}" label="nombre" required="true" requiredMessage="Debe ingresar un valor para el nombre" maxlength="250"/>
+	
+			</h:panelGrid>
+			<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	
+				<p:outputLabel for="desc" value="Descripción:" style="font-weight:bold"/>
+				<p:inputText id="desc" value="#{newEstado.descripcion}" label="descripcion" required="false" maxlength="250"/>
+	
+			</h:panelGrid>
+	
+		</h:panelGrid>
+	         
+         
+         <p>            
+            <p:commandButton id="register" action="#{estadoBean.registrar}" value="Registrar" style="margin-left: 400px;" update="form"/>
+         </p>      
+      
+       <p:dataTable id="estados" var="_estado" value="#{estados}" editable="true" style="text-align:center" emptyMessage="No existen datos a mostrar.">
+       		<f:facet name="header">  
+            	Estados creados 
+        	</f:facet>
+        	
+        	<p:ajax event="rowEdit" listener="#{estadoBean.onEdit}" update=":form:messages" />  
+        	<p:ajax event="rowEditCancel" listener="#{estadoBean.onCancel}" update=":form:messages" />  
+        	 
+        	 <p:column headerText="Id" style="width:5%; font-weight:bold">
+        	 	<h:outputText value="#{_estado.id}" />
+        	 </p:column>
+        	 
+        	 <p:column headerText="Nombre" style="width:25%; font-weight:bold">  
+               <p:cellEditor>  
+                   <f:facet name="output"><h:outputText value="#{_estado.nombre}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputNom" value="#{_estado.nombre}" style="width:96%" required="true"/></f:facet>  
+               </p:cellEditor>  
+           	 </p:column>  
+           	 
+        	 <p:column headerText="Descripción" style="width:25%; font-weight:bold">  
+               <p:cellEditor>  
+                   <f:facet name="output"><h:outputText value="#{_estado.descripcion}" /></f:facet>  
+                   <f:facet name="input"><p:inputText id="modelInputDesc" value="#{_estado.descripcion}" style="width:96%" required="false"/></f:facet>  
+               </p:cellEditor>  
+           	 </p:column>  
+           	            	 
+           	 <p:column style="width:3%">           	 
+	            <p:rowEditor />	         	           
+	        </p:column>
+	       <!--  -->
+	        <p:column style="width:3%">
+	        	<p:commandLink  id="deleteLink" update=":form" immediate="true" ajax="true"
+	        		styleClass="ui-icon ui-icon-trash" actionListener="#{estadoBean.eliminar(_estado.id)}">
+	        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el rol" icon="ui-icon-alert" />
+	        	</p:commandLink>	        	
+	        </p:column>
+	        
+       </p:dataTable>       
+        
+		</h:form>     
+   </ui:define>
+</ui:composition>

@@ -16,8 +16,8 @@
 --
 
 -- You can use this file to load seed data into the database using SQL statements
-DELETE FROM rol;
-INSERT INTO `ordenes`.`rol` (`id`, `descripcion`, `rol`) VALUES ('1', 'ADMIN', 'ADMIN');
-INSERT INTO `ordenes`.`rol` (`id`, `descripcion`, `rol`) VALUES ('2', 'BASICO', 'BASICO');
+DELETE FROM roles;
+INSERT INTO `ordenes`.`roles` (`id`, `descripcion`, `rol`) VALUES ('1', 'ADMIN', 'ADMIN');
+INSERT INTO `ordenes`.`roles` (`id`, `descripcion`, `rol`) VALUES ('2', 'BASICO', 'BASICO');
 DELETE FROM usuarios;
 INSERT INTO `ordenes`.`usuarios` (`id`, `correo`, `nombre`, `password`, `telefono`, `usuario`, `rol`) VALUES ('1', 'admin@workwlow.com.uy', 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'admin', '1');
