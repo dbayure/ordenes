@@ -45,4 +45,19 @@ public class TareaListProducer {
       criteria.select(tarea).orderBy(cb.asc(tarea.get("id")));
       tareas = em.createQuery(criteria).getResultList();
    }
+   
+   public List<Tarea> obtenerTareasDisponiblesPorCliente(Long idOrden, Long idTarea){
+	     CriteriaBuilder cb = em.getCriteriaBuilder();
+	     CriteriaQuery<Tarea> criteria = cb.createQuery(Tarea.class);
+	     Root<Tarea> tarea = criteria.from(Tarea.class);
+	     criteria.select(tarea);
+	     criteria.where(cb.and(cb.notEqual(tarea.get("id"), idTarea)),
+	    		 			   cb.equal(tarea.get("orden"), idOrden));
+       List<Tarea> tareas = em.createQuery(criteria).getResultList();
+       return tareas;
+ }
+   
+   public Tarea getTareaById(Long idTarea){
+	   return em.find(Tarea.class, idTarea);
+   }
 }

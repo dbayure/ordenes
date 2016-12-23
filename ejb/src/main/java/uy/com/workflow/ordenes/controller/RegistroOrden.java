@@ -18,6 +18,7 @@ import uy.com.workflow.ordenes.data.OrdenListProducer;
 import uy.com.workflow.ordenes.model.Cliente;
 import uy.com.workflow.ordenes.model.Estado;
 import uy.com.workflow.ordenes.model.Orden;
+import uy.com.workflow.ordenes.model.Tarea;
 
 
 @Stateful
@@ -34,19 +35,28 @@ public class RegistroOrden {
 	   private Event<Orden> ordenEventSrc;
 
 	   private Orden newOrden;
+	   
+	   private Tarea _Tarea;
 	   	   
 	   @Inject
 	   private OrdenListProducer olp;
 	   
 	   @Inject
 	   private EstadoListProducer elp;
-
+	   
 	   @Produces
 	   @Named
 	   public Orden getNewOrden() {
 	      return newOrden;
 	   }
 
+		
+	   @Produces
+	   @Named
+	   public Tarea get_Tarea() {
+	      return _Tarea;
+	   }
+	   
 	   public void registro() throws Exception {
 	      log.info("Registro " + newOrden.getDetalle() + " con el cliente " + newOrden.getCliente().getNombre());
 	      Cliente cliente = new Cliente();
@@ -103,7 +113,7 @@ public class RegistroOrden {
 		   System.out.println("Cantidad de ordenes eliminadas " + ordenes.size());
 		   for (Orden orden : ordenSeleccionada.getOrdenesPredecesoras()) {
 			System.out.println("Orden que se va a guardar " + orden.getDetalle());
-		}
+		   }
 		   em.merge(ordenSeleccionada);
 	   }
 	   
@@ -114,4 +124,10 @@ public class RegistroOrden {
 	   public List<Estado> getEstados(){
 		   return elp.getEstados();
 	   }
+	   
+		public void agregarTareasOrden(Orden orden) throws Exception{
+			_Tarea.setOrden(orden);
+			orden.getTareas().add(_Tarea);
+			
+		}
 }

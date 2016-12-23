@@ -6,6 +6,56 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define id="ui" name="content">
-		<h1 style="text-align: center;">Pagina principal</h1>
+		<h:form id="form" prependId="false">
+		
+		<h3 class="text-muted">Administrar Ordenes</h3>
+			<hr color="blue" style="height: 30px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"	closable="true" />
+
+			<div class="ui-fluid">
+			
+				<p:panelGrid columns="4" layout="grid" 
+							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+							 styleClass="ui-panelgrid-blank">
+					
+					<label>Detalle: </label>
+					<p:inputText id="detalle" value="#{newTarea.descripcion}" label="nombre"
+						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
+						autocomplete="false" />
+					
+					<label>Cliente: </label>
+					<p:selectOneMenu id="cliente" value="#{newTarea.puesto}"
+						required="true"	requiredMessage="Debe ingresar un valor para el cliente"
+						style="vertical-align:middle;">
+						<f:converter converterId="puestoConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{puestos}" var="_pue" itemLabel="#{_pue.nombre}" itemValue="#{_pue}" />
+					</p:selectOneMenu>
+					
+					<label>Estado: </label>
+					<p:selectOneMenu id="estado" value="#{newTarea.estado}"
+						required="true"	requiredMessage="Debe ingresar un valor para el estado"
+						style="vertical-align:middle;">
+						<f:converter converterId="estadoConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+					</p:selectOneMenu>
+					
+					<label></label>
+					<p:commandButton id="registrar" action="#{tareaBean.registrar()}" value="Registrar" update="form" icon="ui-icon-plus" />
+					
+				</p:panelGrid>
+				
+			</div>
+
+		</h:form>
 	</ui:define>
 </ui:composition>

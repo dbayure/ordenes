@@ -42,6 +42,14 @@ public class OrdenBean {
 	
 	private boolean mostrarTabTarea = false;
 
+	public RegistroOrden getRegistroOrden() {
+		return registroOrden;
+	}
+
+	public void setRegistroOrden(RegistroOrden registroOrden) {
+		this.registroOrden = registroOrden;
+	}
+
 	public Orden getOrdenSeleccionada() {
 		return ordenSeleccionada;
 	}
@@ -49,7 +57,7 @@ public class OrdenBean {
 	public void setOrdenSeleccionada(Orden orden){
 		ordenSeleccionada = orden;
 	}
-	
+
 	public List<Orden> getOrdenesSeleccionadas(){
 		return ordenesSeleccionadas;
 	}
@@ -81,7 +89,7 @@ public class OrdenBean {
 	public void setOrdenesFiltradas(List<Orden> ordenes){
 		ordenesFiltradas = ordenes;
 	}
-	
+
 	public List<String> getEstadosString(){
 		for (Estado e : registroOrden.getEstados()) {
 			EstadosString.add(e.getnombre());
@@ -189,7 +197,6 @@ public class OrdenBean {
         setMostrarTabOrden(true);
         setMostrarTabTarea(true);
     }
-
 	
 	public void agregarOrdenesPredecesoras(){
 		registroOrden.agregarOrdenesPredecesoras(ordenesSeleccionadas, ordenSeleccionada);
@@ -202,6 +209,7 @@ public class OrdenBean {
 		System.out.println("se agregaron " + ordenesSeleccionadasQuitar.size() + " -  ordenes");
 		generearListaOrdenesDisponibles(ordenSeleccionada.getId(), ordenSeleccionada.getCliente().getId());
 	}
+	
 	public void generearListaOrdenesDisponibles(Long idOrden, Long idCli){
 		List<Orden> ordenesInicial = new ArrayList<Orden>();
 		List<Orden> ordenesFinal = new ArrayList<Orden>();
@@ -227,6 +235,15 @@ public class OrdenBean {
 			}
 		}
         setOrdenesDisponibles(ordenesFinal);
+	}
+	
+	public void agregarTareasOrden(){
+		try {
+			registroOrden.agregarTareasOrden(ordenSeleccionada);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
