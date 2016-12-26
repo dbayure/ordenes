@@ -17,9 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
 @Table(name = "puestos")
+@JsonIgnoreProperties({"tareas,usuarios,logsPuesto"})
 public class Puesto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -105,8 +108,6 @@ public class Puesto implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((logsPuesto == null) ? 0 : logsPuesto.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((tareas == null) ? 0 : tareas.hashCode());
-		result = prime * result + ((usuarios == null) ? 0 : usuarios.hashCode());
 		return result;
 	}
 
@@ -138,16 +139,6 @@ public class Puesto implements Serializable {
 			if (other.nombre != null)
 				return false;
 		} else if (!nombre.equals(other.nombre))
-			return false;
-		if (tareas == null) {
-			if (other.tareas != null)
-				return false;
-		} else if (!tareas.equals(other.tareas))
-			return false;
-		if (usuarios == null) {
-			if (other.usuarios != null)
-				return false;
-		} else if (!usuarios.equals(other.usuarios))
 			return false;
 		return true;
 	}

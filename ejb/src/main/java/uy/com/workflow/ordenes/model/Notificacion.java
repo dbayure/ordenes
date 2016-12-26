@@ -14,9 +14,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
 @Table(name = "notificaciones")
+@JsonIgnoreProperties({"tarea"})
 public class Notificacion implements Serializable {
 
 	private static final long serialVersionUID = 1L;

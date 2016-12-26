@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import uy.com.workflow.ordenes.data.EstadoListProducer;
 import uy.com.workflow.ordenes.data.TareaListProducer;
 import uy.com.workflow.ordenes.model.Estado;
+import uy.com.workflow.ordenes.model.Orden;
 import uy.com.workflow.ordenes.model.Tarea;
 
 
@@ -103,10 +104,14 @@ public class RegistroTarea {
 		   return elp.getEstados();
 	   }
 	   
-	   public void agregarTarea() throws Exception{
+	   public void agregarTarea(Orden orden) throws Exception{
 		   System.out.println("Id : " + newTarea.getId());
-		   System.out.println("Pueto : " + newTarea.getPuesto().getDescripcion());
+//		   System.out.println("Pueto : " + newTarea.getPuesto().getDescripcion());
 		   System.out.println("Estado : " + newTarea.getEstado().getDescripcion());
 		   System.out.println("Descripcion : " + newTarea.getDescripcion());
+		   System.out.println("Orden seleccionada : " + orden.getDetalle());
+		   newTarea.setOrden(orden);
+		   orden.getTareas().add(newTarea);
+		   em.merge(orden);
 	   }
 }

@@ -207,7 +207,4 @@ public class TareaBean {
         setTareasDisponibles(tareasFinal);
 	}
     
-    public void agregarTarea() throws Exception{
-    	registroTarea.agregarTarea();
-    }
 }

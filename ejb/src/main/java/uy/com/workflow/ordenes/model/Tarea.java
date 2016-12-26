@@ -18,10 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 
 @Entity
 @XmlRootElement
 @Table(name = "tareas")
+@JsonIgnoreProperties({"orden,estado,puesto,notificaciones,tareasPredecesoras,tareaAsignada"})
 public class Tarea implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -32,7 +35,7 @@ public class Tarea implements Serializable {
 		
 	private String descripcion;
 	
-	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="orden_id")
 	private Orden orden;
 		
@@ -129,13 +132,9 @@ public class Tarea implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((notificaciones == null) ? 0 : notificaciones.hashCode());
 		result = prime * result + ((orden == null) ? 0 : orden.hashCode());
-		result = prime * result + ((puesto == null) ? 0 : puesto.hashCode());
-		result = prime * result + ((tareaAsignada == null) ? 0 : tareaAsignada.hashCode());
-		result = prime * result + ((tareasPredecesoras == null) ? 0 : tareasPredecesoras.hashCode());
 		return result;
 	}
 
@@ -153,11 +152,6 @@ public class Tarea implements Serializable {
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
 			return false;
-		if (estado == null) {
-			if (other.estado != null)
-				return false;
-		} else if (!estado.equals(other.estado))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -173,22 +167,9 @@ public class Tarea implements Serializable {
 				return false;
 		} else if (!orden.equals(other.orden))
 			return false;
-		if (puesto == null) {
-			if (other.puesto != null)
-				return false;
-		} else if (!puesto.equals(other.puesto))
-			return false;
-		if (tareaAsignada == null) {
-			if (other.tareaAsignada != null)
-				return false;
-		} else if (!tareaAsignada.equals(other.tareaAsignada))
-			return false;
-		if (tareasPredecesoras == null) {
-			if (other.tareasPredecesoras != null)
-				return false;
-		} else if (!tareasPredecesoras.equals(other.tareasPredecesoras))
-			return false;
 		return true;
 	}
+
+	
 
 }
