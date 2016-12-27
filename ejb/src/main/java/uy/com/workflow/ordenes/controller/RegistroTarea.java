@@ -106,7 +106,7 @@ public class RegistroTarea {
 	   
 	   public void agregarTarea(Orden orden) throws Exception{
 		   System.out.println("Id : " + newTarea.getId());
-//		   System.out.println("Pueto : " + newTarea.getPuesto().getDescripcion());
+		   System.out.println("Pueto : " + newTarea.getPuesto().getDescripcion());
 		   System.out.println("Estado : " + newTarea.getEstado().getDescripcion());
 		   System.out.println("Descripcion : " + newTarea.getDescripcion());
 		   System.out.println("Orden seleccionada : " + orden.getDetalle());

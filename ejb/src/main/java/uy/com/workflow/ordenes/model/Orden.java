@@ -25,7 +25,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Entity
 @XmlRootElement
 @Table(name = "ordenes")
-@JsonIgnoreProperties({"tareas,estado,cliente"})
+@JsonIgnoreProperties({"tareas","estado","cliente"})
 public class Orden implements Serializable {
 
 	private static final long serialVersionUID = 1L;

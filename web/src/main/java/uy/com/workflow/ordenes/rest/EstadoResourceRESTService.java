@@ -40,7 +40,6 @@ public class EstadoResourceRESTService {
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
       final List<Estado> results = estados.getEstados();
-      System.out.println("elementos de la lista de estados : " + results.size() + results.get(0));
       return results;
    }
 

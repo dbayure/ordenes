@@ -3,7 +3,6 @@ package uy.com.workflow.ordenes.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,7 +21,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Entity
 @XmlRootElement
 @Table(name = "puestos")
-@JsonIgnoreProperties({"tareas,usuarios,logsPuesto"})
+@JsonIgnoreProperties({"tareas","usuarios","logsPuesto"})
 public class Puesto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,16 +34,16 @@ public class Puesto implements Serializable {
 	
 	private String descripcion;
 	
-	@OneToMany(mappedBy="puesto", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy="puesto")
 	private Set<Tarea> tareas;
 	
-	@ManyToMany(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name = "usuarios_puestos",
 			joinColumns = {@JoinColumn(name = "puesto_id", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "usuario_id",	nullable = false, updatable = false) })
 	private Set<Usuario> usuarios;
 	
-	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="logsPuesto_id")
 	private LogPuesto logsPuesto;
 
