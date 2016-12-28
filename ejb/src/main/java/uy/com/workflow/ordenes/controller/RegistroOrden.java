@@ -118,8 +118,7 @@ public class RegistroOrden {
 		   return elp.getEstados();
 	   }
 	   
-		public void agregarTareasOrden(Orden orden) throws Exception{
-			System.out.println("datos de la orden seleccionada: " + orden.getDetalle());
-			rt.agregarTarea(orden);
+		public void agregarTareasOrden(Long id) throws Exception{
+			rt.agregarTarea(id);
 		}
 }

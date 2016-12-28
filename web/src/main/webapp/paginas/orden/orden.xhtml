@@ -12,30 +12,37 @@
 
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 				<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
-					<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-					<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 				</h:panelGrid>
 			</p:confirmDialog>
 
-			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
 
 			<div class="ui-fluid">
 
-				<p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,"
-							 styleClass="ui-panelgrid-blank">
+				<p:panelGrid columns="4" layout="grid"
+					columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,"
+					styleClass="ui-panelgrid-blank">
 
 					<label>Detalle: </label>
 					<p:inputText id="nombre" value="#{newOrden.detalle}" label="nombre"
-								 required="true"	requiredMessage="Debe ingresar un valor para el nombre"
-								 autocomplete="false" />
+						required="true"
+						requiredMessage="Debe ingresar un valor para el nombre"
+						autocomplete="false" />
 
 					<label>Cliente: </label>
 					<p:selectOneMenu id="cliente" value="#{newOrden.cliente}"
-									 required="true"	requiredMessage="Debe ingresar un valor para el cliente"
-									 style="vertical-align:middle;">
+						required="true"
+						requiredMessage="Debe ingresar un valor para el cliente"
+						style="vertical-align:middle;">
 						<f:converter converterId="clienteConverter" />
 						<f:selectItem itemLabel="Seleccione..." itemValue="" />
-						<f:selectItems value="#{clientes}" var="_cli" itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
+						<f:selectItems value="#{clientes}" var="_cli"
+							itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
 					</p:selectOneMenu>
 
 					<label>Fecha Inicio: </label>
@@ -44,45 +51,58 @@
 					<p:calendar id="ffin" value="#{newOrden.fechaEntrega}" />
 
 					<label>Estado: </label>
-					<p:selectOneMenu id="estado" value="#{newOrden.estado}"	required="true"
-						requiredMessage="Debe ingresar un valor para el estado"	style="vertical-align:middle;">
+					<p:selectOneMenu id="estado" value="#{newOrden.estado}"
+						required="true"
+						requiredMessage="Debe ingresar un valor para el estado"
+						style="vertical-align:middle;">
 						<f:converter converterId="estadoConverter" />
 						<f:selectItem itemLabel="Seleccione..." itemValue="" />
-						<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+						<f:selectItems value="#{estados}" var="_est"
+							itemLabel="#{_est.nombre}" itemValue="#{_est}" />
 					</p:selectOneMenu>
 
 					<label></label>
-					<p:commandButton id="register" action="#{ordenBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
+					<p:commandButton id="register" action="#{ordenBean.registrar}"
+						value="Registrar" update="form" icon="ui-icon-plus" />
 
 				</p:panelGrid>
 
-				<p:panelGrid columns="1" layout="grid" columnClasses="ui-grid-col-2" styleClass="ui-panelgrid-blank"/>
+				<p:panelGrid columns="1" layout="grid" columnClasses="ui-grid-col-2"
+					styleClass="ui-panelgrid-blank" />
 
 			</div>
 
 			<hr color="blue" style="height: 30px" />
 
-			<p:dataTable id="ordenes" var="_orden" value="#{ordenes}" style="text-align:center" rows="10" paginator="true"
-				rowKey="#{_orden.id}" emptyMessage="No existen datos a mostrar." editable="true" editMode="cell" reflow="true"
-				rowIndexVar="#{_orden.id}" selectionMode="single" selection="#{ordenBean.ordenSeleccionada}"
+			<p:dataTable id="ordenes" var="_orden" value="#{ordenes}"
+				style="text-align:center" rows="10" paginator="true"
+				rowKey="#{_orden.id}" emptyMessage="No existen datos a mostrar."
+				editable="true" editMode="cell" reflow="true"
+				rowIndexVar="#{_orden.id}" selectionMode="single"
+				selection="#{ordenBean.ordenSeleccionada}"
 				filteredValue="#{ordenBean.ordenesFiltradas}" widgetVar="ordCreadas">
 
 				<f:facet name="header">
 					<p class="text-muted">Administrar Ordenes</p>
 				</f:facet>
 
-				<p:ajax event="cellEdit" listener="#{ordenBean.onCellEdit}" update=":form:messages" />
-				<p:ajax event="rowSelect" listener="#{ordenBean.onRowSelect}" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred :form:tabOrden" />
+				<p:ajax event="cellEdit" listener="#{ordenBean.onCellEdit}"
+					update=":form:messages" />
+				<p:ajax event="rowSelect" listener="#{ordenBean.onRowSelect}"
+					update=":form:tabOrden:ordDisp :form:tabOrden:ordPred :form:tabOrden" />
 
-				<p:column headerText="Id" style="width:15%;" sortBy="#{_orden.id}" filterBy="#{_orden.id}" filterMatchMode="exact">
+				<p:column headerText="Id" style="width:15%;" sortBy="#{_orden.id}"
+					filterBy="#{_orden.id}" filterMatchMode="exact">
 					<h:outputText value="#{_orden.id}" />
 				</p:column>
 
-				<p:column headerText="Estado" sortBy="#{_orden.estado.nombre}" filterBy="#{_orden.estado.nombre}" filterMatchMode="equals">
+				<p:column headerText="Estado" sortBy="#{_orden.estado.nombre}"
+					filterBy="#{_orden.estado.nombre}" filterMatchMode="equals">
 					<p:cellEditor>
 						<f:facet name="filter">
 							<p:selectOneMenu onchange="PF('ordCreadas').filter()">
-								<f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true" />
+								<f:selectItem itemLabel="Seleccione..." itemValue=""
+									noSelectionOption="true" />
 								<f:selectItems value="#{ordenBean.estadosString}" />
 							</p:selectOneMenu>
 						</f:facet>
@@ -90,8 +110,10 @@
 							<h:outputText value="#{_orden.estado.nombre}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{_orden.estado}" converter="estadoConverter">
-								<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+							<p:selectOneMenu value="#{_orden.estado}"
+								converter="estadoConverter">
+								<f:selectItems value="#{estados}" var="_est"
+									itemLabel="#{_est.nombre}" itemValue="#{_est}" />
 							</p:selectOneMenu>
 						</f:facet>
 					</p:cellEditor>
@@ -103,20 +125,24 @@
 							<h:outputText value="#{_orden.detalle}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText id="modelInputSaber" value="#{_orden.detalle}" style="width:96%" required="true"
-										 requiredMessage="Debe ingresar un valor para el detalle" />
+							<p:inputText id="modelInputSaber" value="#{_orden.detalle}"
+								style="width:96%" required="true"
+								requiredMessage="Debe ingresar un valor para el detalle" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
 
-				<p:column headerText="Cliente" filterBy="#{_orden.cliente.nombre}" filterMatchMode="contains">
+				<p:column headerText="Cliente" filterBy="#{_orden.cliente.nombre}"
+					filterMatchMode="contains">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{_orden.cliente.nombre}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{_orden.cliente}" converter="clienteConverter">
-								<f:selectItems value="#{clientes}" var="_cli" itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
+							<p:selectOneMenu value="#{_orden.cliente}"
+								converter="clienteConverter">
+								<f:selectItems value="#{clientes}" var="_cli"
+									itemLabel="#{_cli.nombre}" itemValue="#{_cli}" />
 							</p:selectOneMenu>
 						</f:facet>
 					</p:cellEditor>
@@ -155,10 +181,14 @@
 			<br />
 			<br />
 			<p:tabView id="tabOrden">
-				<p:tab title="Definir precedencia de órdenes" rendered="#{ordenBean.mostrarTabOrden}">
-					<p:dataTable id="ordDisp" var="_ordenDisp" value="#{ordenBean.ordenesDisponibles}"
-						selection="#{ordenBean.ordenesSeleccionadas}" emptyMessage="No existen datos a mostrar." rows="10"
-						editable="true" style="text-align: center;" reflow="true" rowKey="#{_ordenDisp.id}">
+				<p:tab title="Definir precedencia de órdenes"
+					rendered="#{ordenBean.mostrarTabOrden}">
+					<p:dataTable id="ordDisp" var="_ordenDisp"
+						value="#{ordenBean.ordenesDisponibles}"
+						selection="#{ordenBean.ordenesSeleccionadas}"
+						emptyMessage="No existen datos a mostrar." rows="10"
+						editable="true" style="text-align: center;" reflow="true"
+						rowKey="#{_ordenDisp.id}">
 
 						<f:facet name="header">
 							<p class="text-muted">Ordenes disponibles</p>
@@ -183,15 +213,20 @@
 						</p:column>
 
 						<f:facet name="footer">
-							<p:commandButton process="ordDisp" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred"
-								icon="ui-icon-search" value="Agregar" action="#{ordenBean.agregarOrdenesPredecesoras()}" />
+							<p:commandButton process="ordDisp"
+								update=":form:tabOrden:ordDisp :form:tabOrden:ordPred"
+								icon="ui-icon-search" value="Agregar"
+								action="#{ordenBean.agregarOrdenesPredecesoras()}" />
 						</f:facet>
 
 					</p:dataTable>
 
-					<p:dataTable id="ordPred" var="_ordenPred" value="#{ordenBean.ordenSeleccionada.ordenesPredecesoras}"
-						selection="#{ordenBean.ordenesSeleccionadasQuitar}" emptyMessage="No existen datos a mostrar." rows="10"
-						editable="true" style="text-align: center;" reflow="true" rowKey="#{_ordenPred.id}">
+					<p:dataTable id="ordPred" var="_ordenPred"
+						value="#{ordenBean.ordenSeleccionada.ordenesPredecesoras}"
+						selection="#{ordenBean.ordenesSeleccionadasQuitar}"
+						emptyMessage="No existen datos a mostrar." rows="10"
+						editable="true" style="text-align: center;" reflow="true"
+						rowKey="#{_ordenPred.id}">
 
 						<f:facet name="header">
 							<p class="text-muted">Ordenes predecesoras</p>
@@ -216,180 +251,213 @@
 						</p:column>
 
 						<f:facet name="footer">
-							<p:commandButton process="ordPred" update=":form:tabOrden:ordDisp :form:tabOrden:ordPred"
-								icon="ui-icon-search" value="Quitar" action="#{ordenBean.quitarOrdenesPredecesoras()}" />
+							<p:commandButton process="ordPred"
+								update=":form:tabOrden:ordDisp :form:tabOrden:ordPred"
+								icon="ui-icon-search" value="Quitar"
+								action="#{ordenBean.quitarOrdenesPredecesoras()}" />
 						</f:facet>
 
 					</p:dataTable>
 				</p:tab>
-				<p:tab title="Agregar tareas a una orden" rendered="#{ordenBean.mostrarTabTarea}">
-					<div class="ui-fluid">
+				<p:tab title="Agregar tareas a una orden"
+					rendered="#{ordenBean.mostrarTabTarea}">
 
-						<p:panelGrid id="gridTarea" columns="4" layout="grid" styleClass="ui-panelgrid-blank"
-									 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,">
+					<p:panelGrid id="gridTarea" columns="4" layout="grid"
+						styleClass="ui-panelgrid-blank"
+						columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4,">
 
-							<label>Descripción: </label>
-							<p:inputText id="descTarea" value="#{newTarea.descripcion}"	label="desc" required="true"
-								requiredMessage="Debe ingresar un valor para la descripción" autocomplete="false" />
+						<label>Descripción: </label>
+						<p:inputText id="descTarea" value="#{newTarea.descripcion}"
+							label="desc" required="true"
+							requiredMessage="Debe ingresar un valor para la descripción"
+							autocomplete="false" />
 
-							<label>Estado: </label>
-							<p:selectOneMenu id="estarea" value="#{newTarea.estado}" required="true"
-								requiredMessage="Debe ingresar un valor para el estado"	style="vertical-align:middle;">
-								<f:converter converterId="estadoConverter" />
-								<f:selectItem itemLabel="Seleccione..." itemValue="" />
-								<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" />
-							</p:selectOneMenu>
+						<label>Estado: </label>
+						<p:selectOneMenu id="estarea" value="#{newTarea.estado}"
+							required="true"
+							requiredMessage="Debe ingresar un valor para el estado"
+							style="vertical-align:middle;">
+							<f:converter converterId="estadoConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{estados}" var="_est"
+								itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+						</p:selectOneMenu>
 
-							<label>Puesto: </label>
-							<p:selectOneMenu id="puestarea" value="#{newTarea.puesto}" required="true"
-								requiredMessage="Debe ingresar un valor para el puesto"	style="vertical-align:middle;">
-								<f:converter converterId="puestoConverter" />
-								<f:selectItem itemLabel="Seleccione..." itemValue="" />
-								<f:selectItems value="#{puestos}" var="_pue" itemLabel="#{_pue.nombre}" itemValue="#{_pue}" />
-							</p:selectOneMenu>
+						<label>Puesto: </label>
+						<p:selectOneMenu id="puestarea" value="#{newTarea.puesto}"
+							required="true"
+							requiredMessage="Debe ingresar un valor para el puesto"
+							style="vertical-align:middle;">
+							<f:converter converterId="puestoConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{puestos}" var="_pue"
+								itemLabel="#{_pue.nombre}" itemValue="#{_pue}" />
+						</p:selectOneMenu>
 
-							<label></label>
-							<p:commandButton id="regTarea" action="#{ordenBean.agregarTareasOrden()}" value="Registrar" process="gridTarea"
-								icon="ui-icon-plus" />
-						</p:panelGrid>
+						<label></label>
+						<p:commandButton id="regTarea"
+							action="#{ordenBean.agregarTareasOrden()}" value="Registrar"
+							process="gridTarea" icon="ui-icon-plus" />
+					</p:panelGrid>
 
-						<p:panelGrid columns="1" layout="grid" columnClasses="ui-grid-col-2" styleClass="ui-panelgrid-blank"/>
-						
-<!-- 						<p:dataTable id="tareas" var="_tarea" value="#{ordenBean.ordenSeleccionada.tareas}" -->
-<!-- 							style="text-align:center" rows="10" paginator="true" rowKey="#{_tarea.id}" emptyMessage="No existen datos a mostrar." -->
-<!-- 							editable="true" editMode="cell" reflow="true" rowIndexVar="#{_tarea.id}" selectionMode="single" -->
-<!-- 							selection="#{tareaBean.tareaSeleccionada}"	filteredValue="#{tareaBean.tareasFiltradas}" -->
-<!-- 							widgetVar="tareasAsignadas"> -->
+					<p:panelGrid columns="1" layout="grid"
+						columnClasses="ui-grid-col-2" styleClass="ui-panelgrid-blank" />
 
-<!-- 							<f:facet name="header"> -->
-<!-- 								<p class="text-muted">Administrar Tareas</p> -->
-<!-- 							</f:facet> -->
+					<p:dataTable id="tareas" var="_tarea"
+						value="#{ordenBean.ordenSeleccionada.tareas}"
+						style="text-align:center" rows="10" paginator="true"
+						rowKey="#{_tarea.id}" emptyMessage="No existen datos a mostrar."
+						editable="true" editMode="cell" reflow="true"
+						rowIndexVar="#{_tarea.id}" selectionMode="single"
+						selection="#{tareaBean.tareaSeleccionada}"
+						filteredValue="#{tareaBean.tareasFiltradas}"
+						widgetVar="tareasAsignadas">
 
-<!-- 							<p:ajax event="cellEdit" listener="#{tareaBean.onCellEdit}"	update=":form:messages" /> -->
-<!-- 							<p:ajax event="rowSelect" listener="#{tareaBean.onRowSelect}" update=":form:tabOrden:tarDisp :form:tabOrden:tarPred" /> -->
+						<f:facet name="header">
+							<p class="text-muted">Administrar Tareas</p>
+						</f:facet>
 
-<!-- 							<p:column headerText="Id" style="width:15%;" sortBy="#{_tarea.id}" filterBy="#{_tarea.id}" -->
-<!-- 									  filterMatchMode="exact"> -->
-<!-- 								<h:outputText value="#{_tarea.id}" /> -->
-<!-- 							</p:column> -->
+						<p:ajax event="cellEdit" listener="#{tareaBean.onCellEdit}"
+							update=":form:messages" />
+						<p:ajax event="rowSelect" listener="#{tareaBean.onRowSelect}"
+							update=":form:tabOrden:tarDisp :form:tabOrden:tarPred" />
 
-<!-- 							<p:column headerText="Estado" sortBy="#{_tarea.estado.nombre}" filterBy="#{_tarea.estado.nombre}" filterMatchMode="equals"> -->
-<!-- 								<p:cellEditor> -->
-<!-- 									<f:facet name="filter"> -->
-<!-- 										<p:selectOneMenu onchange="PF('tareasAsignadas').filter()"> -->
-<!-- 											<f:selectItem itemLabel="Seleccione..." itemValue="" noSelectionOption="true" /> -->
-<!-- 											<f:selectItems value="#{tareaBean.estadosString}" /> -->
-<!-- 										</p:selectOneMenu> -->
-<!-- 									</f:facet> -->
-<!-- 									<f:facet name="output"> -->
-<!-- 										<h:outputText value="#{_tarea.estado.nombre}" /> -->
-<!-- 									</f:facet> -->
-<!-- 									<f:facet name="input"> -->
-<!-- 										<p:selectOneMenu value="#{_tarea.estado}" converter="estadoConverter"> -->
-<!-- 											<f:selectItems value="#{estados}" var="_est" itemLabel="#{_est.nombre}" itemValue="#{_est}" /> -->
-<!-- 										</p:selectOneMenu> -->
-<!-- 									</f:facet> -->
-<!-- 								</p:cellEditor> -->
-<!-- 							</p:column> -->
+						<p:column headerText="Id" style="width:15%;" sortBy="#{_tarea.id}"
+							filterBy="#{_tarea.id}" filterMatchMode="exact">
+							<h:outputText value="#{_tarea.id}" />
+						</p:column>
 
-<!-- 							<p:column headerText="Descripción"> -->
-<!-- 								<p:cellEditor> -->
-<!-- 									<f:facet name="output"> -->
-<!-- 										<h:outputText value="#{_tarea.descripcion}" /> -->
-<!-- 									</f:facet> -->
-<!-- 									<f:facet name="input"> -->
-<!-- 										<p:inputText id="modelInputSaber" value="#{_tarea.descripcion}"	style="width:96%" required="true" -->
-<!-- 											requiredMessage="Debe ingresar un valor para el detalle" /> -->
-<!-- 									</f:facet> -->
-<!-- 								</p:cellEditor> -->
-<!-- 							</p:column> -->
+						<p:column headerText="Estado" sortBy="#{_tarea.estado.nombre}"
+							filterBy="#{_tarea.estado.nombre}" filterMatchMode="equals">
+							<p:cellEditor>
+								<f:facet name="filter">
+									<p:selectOneMenu onchange="PF('tareasAsignadas').filter()">
+										<f:selectItem itemLabel="Seleccione..." itemValue=""
+											noSelectionOption="true" />
+										<f:selectItems value="#{tareaBean.estadosString}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet name="output">
+									<h:outputText value="#{_tarea.estado.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectOneMenu value="#{_tarea.estado}"
+										converter="estadoConverter">
+										<f:selectItems value="#{estados}" var="_est"
+											itemLabel="#{_est.nombre}" itemValue="#{_est}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 
-<!-- 							<p:column headerText="Puesto" filterBy="#{_tarea.puesto.nombre}" filterMatchMode="contains"> -->
-<!-- 								<p:cellEditor> -->
-<!-- 									<f:facet name="output"> -->
-<!-- 										<h:outputText value="#{_tarea.puesto.nombre}" /> -->
-<!-- 									</f:facet> -->
-<!-- 									<f:facet name="input"> -->
-<!-- 										<p:selectOneMenu value="#{_tarea.puesto}" converter="puestoConverter"> -->
-<!-- 											<f:selectItems value="#{puestos}" var="_pue" itemLabel="#{_pue.nombre}" itemValue="#{_pue}" /> -->
-<!-- 										</p:selectOneMenu> -->
-<!-- 									</f:facet> -->
-<!-- 								</p:cellEditor> -->
-<!-- 							</p:column> -->
+						<p:column headerText="Descripción">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{_tarea.descripcion}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText id="modelInputSaber" value="#{_tarea.descripcion}"
+										style="width:96%" required="true"
+										requiredMessage="Debe ingresar un valor para el detalle" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 
-<!-- 						</p:dataTable> -->
-						
-<!-- 					<p:dataTable id="tarDisp" var="_tarDisp" value="#{tareaBean.tareasDisponibles}" -->
-<!-- 						selection="#{tareaBean.tareasSeleccionadas}" emptyMessage="No existen datos a mostrar." rows="10" -->
-<!-- 						editable="true" style="text-align: center;" reflow="true" rowKey="#{_tarDisp.id}"> -->
+						<p:column headerText="Puesto" filterBy="#{_tarea.puesto.nombre}"
+							filterMatchMode="contains">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{_tarea.puesto.nombre}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectOneMenu value="#{_tarea.puesto}"
+										converter="puestoConverter">
+										<f:selectItems value="#{puestos}" var="_pue"
+											itemLabel="#{_pue.nombre}" itemValue="#{_pue}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 
-<!-- 						<f:facet name="header"> -->
-<!-- 							<p class="text-muted">Tareas disponibles</p> -->
-<!-- 						</f:facet> -->
+					</p:dataTable>
 
-<!-- 						<p:column width="50" selectionMode="multiple" /> -->
+					<p:dataTable id="tarDisp" var="_tarDisp"
+						value="#{tareaBean.tareasDisponibles}"
+						selection="#{tareaBean.tareasSeleccionadas}"
+						emptyMessage="No existen datos a mostrar." rows="10"
+						editable="true" style="text-align: center;" reflow="true"
+						rowKey="#{_tarDisp.id}">
 
-<!-- 						<p:column headerText="Id"> -->
-<!-- 							<h:outputText value="#{_tarDisp.id}" /> -->
-<!-- 						</p:column> -->
+						<f:facet name="header">
+							<p class="text-muted">Tareas disponibles</p>
+						</f:facet>
 
-<!-- 						<p:column headerText="Descripción"> -->
-<!-- 							<h:outputText value="#{_tarDisp.descripcion}" /> -->
-<!-- 						</p:column> -->
+						<p:column width="50" selectionMode="multiple" />
 
-<!-- 						<p:column headerText="Puesto"> -->
-<!-- 							<h:outputText value="#{_tarDisp.puesto.nombre}" /> -->
-<!-- 						</p:column> -->
+						<p:column headerText="Id">
+							<h:outputText value="#{_tarDisp.id}" />
+						</p:column>
 
-<!-- 						<p:column headerText="Estado"> -->
-<!-- 							<h:outputText value="#{_tarDisp.estado.descripcion}" /> -->
-<!-- 						</p:column> -->
+						<p:column headerText="Descripción">
+							<h:outputText value="#{_tarDisp.descripcion}" />
+						</p:column>
 
-<!-- 						<f:facet name="footer"> -->
-<!-- 							<p:commandButton process="tarDisp" update=":form:tabOrden:tarDisp :form:tabOrden:tarPred" -->
-<!-- 								icon="ui-icon-search" value="Agregar" action="#{ordenBean.agregarOrdenesPredecesoras()}" /> -->
-<!-- 						</f:facet> -->
+						<p:column headerText="Puesto">
+							<h:outputText value="#{_tarDisp.estado.descripcion}" />
+						</p:column>
 
-<!-- 					</p:dataTable> -->
+						<p:column headerText="Estado">
+							<h:outputText value="#{_tarDisp.estado.descripcion}" />
+						</p:column>
 
-<!-- 					<p:dataTable id="tarPred" var="_tarPred" value="#{tareaBean.tareaSeleccionada.tareasPredecesoras}" -->
-<!-- 						selection="#{tareaBean.tareasSeleccionadasQuitar}" emptyMessage="No existen datos a mostrar." rows="10" -->
-<!-- 						editable="true" style="text-align: center;" reflow="true" rowKey="#{_tarPred.id}"> -->
+						<f:facet name="footer">
+							<p:commandButton process="tarDisp"
+								update=":form:tabOrden:tarDisp :form:tabOrden:tarPred"
+								icon="ui-icon-search" value="Agregar"
+								action="#{tareaBean.agregarTareasPredecesoras()}" />
+						</f:facet>
 
-<!-- 						<f:facet name="header"> -->
-<!-- 							<p class="text-muted">Tareas predecesoras</p> -->
-<!-- 						</f:facet> -->
+					</p:dataTable>
 
-<!-- 						<p:column width="50" selectionMode="multiple" /> -->
+					<p:dataTable id="tarPred" var="_tarPred"
+						value="#{tareaBean.tareaSeleccionada.tareasPredecesoras}"
+						selection="#{tareaBean.tareasSeleccionadasQuitar}"
+						emptyMessage="No existen datos a mostrar." rows="10"
+						editable="true" style="text-align: center;" reflow="true"
+						rowKey="#{_tarPred.id}">
 
-<!-- 						<p:column headerText="Id"> -->
-<!-- 							<h:outputText value="#{_tarPred.id}" /> -->
-<!-- 						</p:column> -->
+						<f:facet name="header">
+							<p class="text-muted">Tareas predecesoras</p>
+						</f:facet>
 
-<!-- 						<p:column headerText="Descripción"> -->
-<!-- 							<h:outputText value="#{_tarPred.descripcion}" /> -->
-<!-- 						</p:column> -->
+						<p:column width="50" selectionMode="multiple" />
 
-<!-- 						<p:column headerText="Puesto"> -->
-<!-- 							<h:outputText value="#{_tarPred.puesto.nombre}" /> -->
-<!-- 						</p:column> -->
+						<p:column headerText="Id">
+							<h:outputText value="#{_tarPred.id}" />
+						</p:column>
 
-<!-- 						<p:column headerText="Estado"> -->
-<!-- 							<h:outputText value="#{_tarPred.estado.descripcion}" /> -->
-<!-- 						</p:column> -->
+						<p:column headerText="Descripción">
+							<h:outputText value="#{_tarPred.descripcion}" />
+						</p:column>
 
-<!-- 						<f:facet name="footer"> -->
-<!-- 							<p:commandButton process="tarPred" update=":form:tabOrden:tarDisp :form:tabOrden:tarPred" -->
-<!-- 								icon="ui-icon-search" value="Quitar" action="#{tareaBean.quitarTareasPredecesoras()}" /> -->
-<!-- 						</f:facet> -->
+						<p:column headerText="Puesto">
+							<h:outputText value="#{_tarPred.puesto.nombre}" />
+						</p:column>
 
-<!-- 					</p:dataTable> -->
-					
-					</div>
+						<p:column headerText="Estado">
+							<h:outputText value="#{_tarPred.estado.descripcion}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton process="tarPred"
+								update=":form:tabOrden:tarDisp :form:tabOrden:tarPred"
+								icon="ui-icon-search" value="Quitar"
+								action="#{tareaBean.quitarTareasPredecesoras()}" />
+						</f:facet>
+
+					</p:dataTable>
 				</p:tab>
-
 			</p:tabView>
-
 		</h:form>
 
 		<br />

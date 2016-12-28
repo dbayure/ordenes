@@ -239,7 +239,7 @@ public class OrdenBean {
 	
 	public void agregarTareasOrden(){
 		try {
-			registroOrden.agregarTareasOrden(ordenSeleccionada);
+			registroOrden.agregarTareasOrden(ordenSeleccionada.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

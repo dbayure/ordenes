@@ -82,9 +82,11 @@ public class RegistroTarea {
 		   return tareasDisponibles;
 	   }
 	   
-	   public void agregarTareasPredecesoras(List<Tarea> tareas, Tarea tareaSeleccionada){
+	   public void agregarTareasPredecesoras(List<Tarea> tareas, Long idTarea){
+		   Tarea tareaSeleccionada = new Tarea();
+		   tareaSeleccionada = em.find(Tarea.class, idTarea);
 		   for (Tarea t : tareas) {
-			   System.out.println("agrego orden : " + t.getDescripcion());
+			   System.out.println("agrego tarea : " + t.getDescripcion());
 			   tareaSeleccionada.getTareasPredecesoras().add(t);
 		   }
 		   System.out.println("Cantidad de ordenes agregadas " + tareas.size());
@@ -104,7 +106,9 @@ public class RegistroTarea {
 		   return elp.getEstados();
 	   }
 	   
-	   public void agregarTarea(Orden orden) throws Exception{
+	   public void agregarTarea(Long id) throws Exception{
+		   Orden orden = new Orden();
+		   orden = em.find(Orden.class, id);
 		   System.out.println("Id : " + newTarea.getId());
 		   System.out.println("Pueto : " + newTarea.getPuesto().getDescripcion());
 		   System.out.println("Estado : " + newTarea.getEstado().getDescripcion());

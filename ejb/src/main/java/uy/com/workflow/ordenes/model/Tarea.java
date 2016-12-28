@@ -50,7 +50,7 @@ public class Tarea implements Serializable {
 	@OneToMany(mappedBy="tarea", cascade={CascadeType.ALL})
 	private Set<Notificacion> notificaciones;
 	
-	@ManyToMany(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="Tpredecesoras",
 		joinColumns={@JoinColumn(name="tarea_id")},
 		inverseJoinColumns={@JoinColumn(name="predecesora_id")})

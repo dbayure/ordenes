@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ import uy.com.workflow.ordenes.model.Tarea;
 
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class TareaBean {
 
 	@Inject
@@ -58,8 +58,9 @@ public class TareaBean {
 		return tareasSeleccionadas;
 	}
 
-	public void setTareasSeleccionadas(List<Tarea> tareasSeleccionadas) {
-		this.tareasSeleccionadas = tareasSeleccionadas;
+	public void setTareasSeleccionadas(List<Tarea> tareas) {
+		this.tareasSeleccionadas = tareas;
+		System.out.println("Cantidad de tareas seteadas : " + tareasSeleccionadas.size());
 	}
 	
 	public List<Tarea> getTareasSeleccionadasQuitar() {
@@ -169,8 +170,9 @@ public class TareaBean {
     }
     
     public void agregarTareasPredecesoras(){
-		registroTarea.agregarTareasPredecesoras(tareasSeleccionadas, tareaSeleccionada);
-		System.out.println("se agregaron " + tareasSeleccionadas.size() + " -  tareas");
+    	System.out.println("datos de la tarea seleccionada : " + tareaSeleccionada.getDescripcion());
+    	System.out.println("se agregaran " + tareasSeleccionadas.size() + " -  tareas");
+		registroTarea.agregarTareasPredecesoras(tareasSeleccionadas, tareaSeleccionada.getId());
 		generearListaTareasDisponibles(tareaSeleccionada.getOrden().getId(), tareaSeleccionada.getId());
 	}
 	
