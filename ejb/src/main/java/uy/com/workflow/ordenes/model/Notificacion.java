@@ -38,7 +38,7 @@ public class Notificacion implements Serializable {
 	
 	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
 	@JoinColumn(name="estado_id")
-	private EstadoNotificacion estado;
+	private Estado estado;
 	
 	@ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
 	@JoinColumn(name="tipoNotificacion_id")
@@ -80,11 +80,11 @@ public class Notificacion implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public EstadoNotificacion getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadoNotificacion estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 

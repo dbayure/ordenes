@@ -1,11 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/templates/default.xhtml">
-	<ui:define id="ui" name="content">
-		<h1 style="text-align: center;">Pagina principal</h1>
-	</ui:define>
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+    <h3 class="text-muted">Administar Notificaciones</h3>
+	<br />
+	<hr color="#0080ff" size="1" />
+	
+      <h:form id="form" prependId="false">
+      
+      	<p:growl id="msgs" showDetail="false" />
+				
+		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		     <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		     </h:panelGrid>   
+		    </p:confirmDialog>
+         
+         <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
+         
+         <div class="ui-fluid">
+   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+											 
+					<label for="nombre">Descripción : </label>
+					<p:inputText id="desc" value="#{newNotificacion.descripcion}" label="descripcion" 
+								 required="false" maxlength="250"/>	
+								 
+					<label for="fecha">Fecha : </label>
+			        <p:calendar id="fecha" value="#{newNotificacion.fecha}"/>
+					
+					<label>Tarea: </label>
+					<p:selectOneMenu id="tarea" value="#{newNotificacion.tarea}"
+						required="true"	requiredMessage="Debe ingresar un valor para la tarea"
+						style="vertical-align:middle;">
+						<f:converter converterId="tareaConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{tareas}" var="tar"
+							itemLabel="#{tar.descripcion}" itemValue="#{tar}" />
+					</p:selectOneMenu>
+					
+					<label>Estado: </label>
+					<p:selectOneMenu id="estado" value="#{newNotificacion.estado}"
+						required="true"	requiredMessage="Debe ingresar un valor para el estado"
+						style="vertical-align:middle;">
+						<f:converter converterId="estadoConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{estados}" var="est"
+							itemLabel="#{est.nombre}" itemValue="#{est}" />
+					</p:selectOneMenu>
+					
+					<label>Tipo: </label>
+					<p:selectOneMenu id="tipo" value="#{newNotificacion.tipoNotificacion}"
+						required="true"	requiredMessage="Debe ingresar un valor para el tipo de notificación"
+						style="vertical-align:middle;">
+						<f:converter converterId="tipoNotificacionConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{tiposNotificacion}" var="tn"
+							itemLabel="#{tn.nombre}" itemValue="#{tn}" />
+					</p:selectOneMenu>
+					
+					<p:commandButton id="register" action="#{notificacionBean.registrar}" value="Registrar" 
+									 update="form" icon="ui-icon-plus"/>
+				</p:panelGrid>
+			</div>
+			
+        <hr color="#0080ff" size="1" />
+
+       	 <p:dataTable id="notificaciones" var="_noti" value="#{notificaciones}" editable="true" style="text-align:center" 
+       	 			  editMode="cell" reflow="true"	emptyMessage="No existen datos a mostrar." sortBy="#{_noti.id}" >
+       	 			  
+       		<f:facet name="header">  
+            	<p class="text-muted">Notificaciones</p>
+        	</f:facet>
+        	
+        	<p:ajax event="cellEdit" listener="#{notificacionBean.onCellEdit}" update=":form:messages"/>
+        	 
+        	 <p:column headerText="Id" style="text-transform: capitalize; width:10%">
+        	 	<h:outputText value="#{_noti.id}" />
+        	 </p:column>
+        	 
+        	 <p:column headerText="Descripción" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_noti.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputNombre" value="#{_noti.descripcion}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+        	 <p:column headerText="Descripción" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_puesto.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputDesc" value="#{_puesto.descripcion}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+
+	      	<p:column headerText="Eliminar" style="text-transform: capitalize;">
+		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        				  actionListener="#{puestoBean.eliminar(_puesto.id)}">
+		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el puesto" icon="ui-icon-alert" />
+		     	</p:commandButton>	        	
+		    </p:column>
+		    
+       </p:dataTable>       
+        
+		</h:form>     
+   </ui:define>
 </ui:composition>

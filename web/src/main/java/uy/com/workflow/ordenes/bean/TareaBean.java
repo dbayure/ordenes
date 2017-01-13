@@ -170,15 +170,12 @@ public class TareaBean {
     }
     
     public void agregarTareasPredecesoras(){
-    	System.out.println("datos de la tarea seleccionada : " + tareaSeleccionada.getDescripcion());
-    	System.out.println("se agregaran " + tareasSeleccionadas.size() + " -  tareas");
 		registroTarea.agregarTareasPredecesoras(tareasSeleccionadas, tareaSeleccionada.getId());
 		generearListaTareasDisponibles(tareaSeleccionada.getOrden().getId(), tareaSeleccionada.getId());
 	}
 	
 	public void quitarTareasPredecesoras(){
 		registroTarea.quitarTareasPredecesoras(tareasSeleccionadasQuitar, tareaSeleccionada);
-		System.out.println("se agregaron " + tareasSeleccionadasQuitar.size() + " -  tareas");
 		generearListaTareasDisponibles(tareaSeleccionada.getOrden().getId(), tareaSeleccionada.getId());
 	}
 	

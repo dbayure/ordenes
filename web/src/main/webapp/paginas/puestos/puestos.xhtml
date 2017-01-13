@@ -1,98 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/templates/default.xhtml">
-	<ui:define name="content">
-		<h1 style="text-align: center;">Administrar Puestos</h1>
-
-
-		<h:form id="form" prependId="false">
-
-			<p:growl id="msgs" showDetail="false" />
-
-
-			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+    <h3 class="text-muted">Administar Puestos</h3>
+	<br />
+	<hr color="#0080ff" size="1" />
+	
+      <h:form id="form" prependId="false">
+      
+      	<p:growl id="msgs" showDetail="false" />
+				
+		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		     <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		     </h:panelGrid>   
+		    </p:confirmDialog>
+         
+         <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
+         
+         <div class="ui-fluid">
+   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+					
+					<label for="nombre">Nombre : *</label>	
+					<p:inputText id="nombre" value="#{newPuesto.nombre}" label="nombre" required="true" 
+								 requiredMessage="Debe ingresar un valor para el nombre" maxlength="250"/>
+								 
+					<label for="nombre">Descripción : </label>
+					<p:inputText id="desc" value="#{newPuesto.descripcion}" label="descripcion" 
+								 required="false" maxlength="250"/>	
+								 
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"	
+							 columnClasses="ui-grid-col-10,ui-grid-col-2">
+					<label for="nombre"></label>
+					
+					<p:commandButton id="register" action="#{puestoBean.registrar}" value="Registrar" 
+									 update="form" icon="ui-icon-plus"/>
+				</p:panelGrid>
+			</div>
 			
-				<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
-					<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-					<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				</h:panelGrid>
-				
-			</p:confirmDialog>
+        <hr color="#0080ff" size="1" />
 
-			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
-
-			<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
-
-				<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
-
-					<p:outputLabel for="nombre" value="Nombre:" style="font-weight:bold" />
-					<p:inputText id="nombre" value="#{newPuesto.nombre}" label="nombre"	required="true" requiredMessage="Debe ingresar un valor para el nombre"	maxlength="250" />
-
-				</h:panelGrid>
-				
-				<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
-
-					<p:outputLabel for="desc" value="Descripción:" style="font-weight:bold" />
-					<p:inputText id="desc" value="#{newPuesto.descripcion}"	label="descripcion" required="false" maxlength="250" />
-
-				</h:panelGrid>
-
-			</h:panelGrid>
-
-			<p>
-				<p:commandButton id="register" action="#{puestoBean.registrar}"
-					value="Registrar" style="margin-left: 400px;" update="form" />
-			</p>
-
-			<p:dataTable id="puestos" var="_puesto" value="#{puestos}"
-				editable="true" style="text-align:center"
-				emptyMessage="No existen datos a mostrar.">
-				<f:facet name="header">  
-            	Puestos creados
+       	 <p:dataTable id="puestos" var="_puesto" value="#{puestos}" editable="true" style="text-align:center" 
+       	 			  editMode="cell" reflow="true"	emptyMessage="No existen datos a mostrar." sortBy="#{_puesto.id}" >
+       	 			  
+       		<f:facet name="header">  
+            	<p class="text-muted">Puestos</p>
         	</f:facet>
+        	
+        	<p:ajax event="cellEdit" listener="#{puestoBean.onCellEdit}" update=":form:messages"/>
+        	 
+        	 <p:column headerText="Id" style="text-transform: capitalize; width:10%">
+        	 	<h:outputText value="#{_puesto.id}" />
+        	 </p:column>
+        	 
+        	 <p:column headerText="Nombre" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_puesto.nombre}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputNombre" value="#{_puesto.nombre}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+        	 <p:column headerText="Descripción" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_puesto.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputDesc" value="#{_puesto.descripcion}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
 
-				<p:ajax event="rowEdit" listener="#{puestoBean.onEdit}"
-					update=":form:messages" />
-				<p:ajax event="rowEditCancel" listener="#{puestoBean.onCancel}"
-					update=":form:messages" />
-
-				<p:column headerText="Id" style="width:5%; font-weight:bold">
-					<h:outputText value="#{_puesto.id}" />
-				</p:column>
-
-				<p:column headerText="Descripción"
-					style="width:25%; font-weight:bold">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{_puesto.descripcion}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="modelInputDesc" value="#{_puesto.descripcion}"
-								style="width:96%" required="true" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column style="width:3%">
-					<p:rowEditor />
-				</p:column>
-				<!--  -->
-				<p:column style="width:3%">
-					<p:commandLink id="deleteLink" update=":form" immediate="true"
-						ajax="true" styleClass="ui-icon ui-icon-trash"
-						actionListener="#{puestoBean.eliminar(_puesto.id)}">
-						<p:confirm header="Confirmación"
-							message="Esta seguro que desea eliminar el puesto"
-							icon="ui-icon-alert" />
-					</p:commandLink>
-				</p:column>
-
-			</p:dataTable>
-
-		</h:form>
-	</ui:define>
+	      	<p:column headerText="Eliminar" style="text-transform: capitalize;">
+		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        				  actionListener="#{puestoBean.eliminar(_puesto.id)}">
+		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el puesto" icon="ui-icon-alert" />
+		     	</p:commandButton>	        	
+		    </p:column>
+		    
+       </p:dataTable>       
+        
+		</h:form>     
+   </ui:define>
 </ui:composition>

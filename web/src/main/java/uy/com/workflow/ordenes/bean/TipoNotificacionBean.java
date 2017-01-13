@@ -5,6 +5,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import uy.com.workflow.ordenes.controller.RegistroTipoNotificacion;
@@ -74,4 +77,26 @@ public class TipoNotificacionBean {
 		  
 	}
 	
+	public void onCellEdit(CellEditEvent event) {  
+		Object oldValue = event.getOldValue();
+	    Object newValue = event.getNewValue();
+            try {
+            	if(newValue != null && !newValue.equals(oldValue)) {
+            	    DataTable d = (DataTable) event.getSource();
+            	    TipoNotificacion tn = (TipoNotificacion) d.getRowData();
+            	    if ( event.getRowIndex() == 3){
+            	    	tn.setDescripcion(newValue.toString());
+            	    }
+            	    else{
+            	    	tn.setnombre(newValue.toString());
+            	    }
+            	    registroTipoNotificacion.modificar(tn);
+                }
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El tipo de notificación fue modificado exitosamente" , "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			} catch (Exception e) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el tipo de notificaión", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			}
+    }
 }

@@ -412,7 +412,7 @@
 
 						<f:facet name="footer">
 							<p:commandButton process="tarDisp"
-								update=":form:tabOrden:tarDisp :form:tabOrden:tarPred"
+								update="@form"
 								icon="ui-icon-search" value="Agregar"
 								action="#{tareaBean.agregarTareasPredecesoras()}" />
 						</f:facet>

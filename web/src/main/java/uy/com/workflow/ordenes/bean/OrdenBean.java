@@ -200,13 +200,11 @@ public class OrdenBean {
 	
 	public void agregarOrdenesPredecesoras(){
 		registroOrden.agregarOrdenesPredecesoras(ordenesSeleccionadas, ordenSeleccionada);
-		System.out.println("se agregaron " + ordenesSeleccionadas.size() + " -  ordenes");
 		generearListaOrdenesDisponibles(ordenSeleccionada.getId(), ordenSeleccionada.getCliente().getId());
 	}
 	
 	public void quitarOrdenesPredecesoras(){
 		registroOrden.quitarOrdenesPredecesoras(ordenesSeleccionadasQuitar, ordenSeleccionada);
-		System.out.println("se agregaron " + ordenesSeleccionadasQuitar.size() + " -  ordenes");
 		generearListaOrdenesDisponibles(ordenSeleccionada.getId(), ordenSeleccionada.getCliente().getId());
 	}
 	
