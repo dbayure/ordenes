@@ -1,8 +1,10 @@
 package uy.com.workflow.ordenes.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,12 +37,12 @@ public class Usuario implements Serializable {
 
 	private String password;
 
-	private Integer telefono;
+	private String telefono;
 
 	private String correo;
 	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
-	private Set<Puesto> puestos;
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios",cascade = CascadeType.ALL)
+	private Set<Puesto> puestos = new HashSet<Puesto>();
 	
     @OneToOne(orphanRemoval = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "rol", unique = false)
@@ -83,11 +85,11 @@ public class Usuario implements Serializable {
 		this.password = passHash;
 	}
 
-	public Integer getTelefono() {
+	public String getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(Integer telefono) {
+	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
 
@@ -177,5 +179,5 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -1,11 +1,236 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/templates/default.xhtml">
-	<ui:define id="ui" name="content">
-		<h1 style="text-align: center;">Pagina principal</h1>
-	</ui:define>
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+    <h3 class="text-muted">Administar Puestos</h3>
+	<br />
+	<hr color="#0080ff" size="1" />
+	
+      <h:form id="form" prependId="false">
+      
+      	<p:growl id="msgs" showDetail="false" />
+				
+		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		     <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		     </h:panelGrid>   
+		    </p:confirmDialog>
+         
+         <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
+         
+         <div class="ui-fluid">
+   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+					
+					<label for="nombre">Nombre : *</label>	
+					<p:inputText id="nombre" value="#{newUsuario.nombre}" label="nombre" required="true" 
+								 requiredMessage="Debe ingresar un valor para el nombre" maxlength="250"/>
+								 
+					<label for="correo">Correo : </label>
+					<p:inputText id="correo" value="#{newUsuario.correo}" label="correo" 
+								 required="false" maxlength="250"/>	
+								
+					<label for="tel">Teléfono : </label>
+					<p:inputMask id="tel" value="#{newUsuario.telefono}" mask="(999) 99-999999"/>
+								 
+					<label for="usuario">Usuario : *</label>	
+					<p:inputText id="usuario" value="#{newUsuario.usuario}" label="nombre" required="true" 
+								 requiredMessage="Debe ingresar un valor para el usuario" maxlength="250"/>
+								 
+					<label for="pass1">Contraseña : </label>
+			        <p:password id="pass1" value="#{newUsuario.password}" required="true" match="pass2" feedback="true" 
+			        			validatorMessage="Error de validación, las contraseñas no coinciden" label="pass1"/>		
+
+					<label for="pass2">Contraseña : </label>
+					<p:password id="pass2" value="#{newUsuario.password}" required="true" feedback="true" label="pass2"/>
+					
+					<label for="rol">Rol : </label>
+					<p:selectOneMenu id="roles" value="#{newUsuario.rol}" required="true" requiredMessage="Campo requerido, debe ingresar un valor para el rol">
+						<f:converter converterId="rolConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />
+					</p:selectOneMenu>
+				
+					<label for="rol">Puestos : </label>
+					<p:selectManyMenu id="puestos" value="#{newUsuario.puestos}" 
+									  var="_p" filter="true" filterMatchMode="contains" showCheckbox="true">
+						<f:converter converterId="puestoConverter" />
+						<f:selectItems value="#{puestos}" var="_p" itemLabel="#{_p.nombre}" itemValue="#{_p}"/> 
+            			<p:column>
+                			<i class="fa fa-desktop" aria-hidden="true"></i>
+            			</p:column>
+ 
+            			<p:column>
+                			<h:outputText value="#{_p.nombre}" />
+            			</p:column>
+        			</p:selectManyMenu>
+        			
+        			<label for="nombre"></label>
+        			<p:commandButton id="register" action="#{usuarioBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus"/>
+								 					 								
+				</p:panelGrid>
+				
+			</div>
+			
+        <hr color="#0080ff" size="1" />
+        
+       	 <p:dataTable id="usuarios" var="_usr" value="#{usuarios}" editable="true" style="text-align:center" 
+       	 			  editMode="cell" reflow="true"	emptyMessage="No existen datos a mostrar." sortBy="#{_usr.id}" 
+       	 			  rowKey="#{_usr.id}" rowIndexVar="#{_usr.id}" selectionMode="single" selection="#{usuarioBean.usrSeleccionado}" >
+       	 			  
+       		 <f:facet name="header">  
+            	<p class="text-muted">Usuarios</p>
+        	 </f:facet>
+        	
+        	 <p:ajax event="cellEdit" listener="#{usuarioBean.onCellEdit}" update=":form:messages"/>
+        	 <p:ajax event="rowSelect" listener="#{usuarioBean.onRowSelect}" update=":form:pdisp :form:pAsig" />
+					
+        	 <p:column headerText="Id" style="text-transform: capitalize; width:10%">
+        	 	<h:outputText value="#{_usr.id}" />
+        	 </p:column>
+        	 
+        	 <p:column headerText="Nombre" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_usr.nombre}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputNombre" value="#{_usr.nombre}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+        	 <p:column headerText="Usuario" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_usr.usuario}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputUsr" value="#{_usr.usuario}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+           	 <p:column headerText="correo" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_usr.correo}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputCorreo" value="#{_usr.correo}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+           	 <p:column headerText="Rol" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_usr.rol.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:selectOneMenu id="roles" value="#{newUsuario.rol}" required="true" requiredMessage="Campo requerido, debe ingresar un valor para el rol">
+							<f:converter converterId="rolConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />
+					</p:selectOneMenu>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+		    
+	      	<p:column headerText="Eliminar" style="text-transform: capitalize;">
+		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        				  actionListener="#{usuarioBean.eliminar(_usr.id)}">
+		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el usuario" icon="ui-icon-alert" />
+		     	</p:commandButton>	        	
+		    </p:column>
+		    
+		    <f:facet name="footer">
+            	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#loadPuestos">
+					<i class="fa fa-picture-o" aria-hidden="true"></i> Puestos
+				</button>
+        	</f:facet>
+        	
+        	<f:facet name="footer">
+            	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#loadPass">
+					<i class="fa fa-picture-o" aria-hidden="true"></i> Contraseña
+				</button>
+        	</f:facet>
+		    
+       </p:dataTable>      
+       
+       <div id="loadPuestos" class="collapse">
+       		<p:dataTable id="pAsig" var="_pasig" value="#{usuarioBean.puestosAsignados}" selectionMode="multiple"
+       					 selection="#{usuarioBean.puestosSeleccionadosQuitar}" emptyMessage="No existen datos a mostrar." rows="10"
+						 editable="true" style="text-align: center;" reflow="true" rowKey="#{_pasig.id}">
+
+					<f:facet name="header">
+						<p class="text-muted">Puestos Asignados</p>
+					</f:facet>
+
+					<p:column width="50" selectionMode="multiple" />
+
+					<p:column headerText="Id">
+						<h:outputText value="#{_pasig.id}" />
+					</p:column>
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{_pasig.nombre}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{_pasig.descripcion}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton process="pAsig" value="Agregar" action="#{usuarioBean.quitarPuestosAlUsuario()}"
+										 icon="ui-icon-search" update=":form:pdisp :form:pAsig"/>
+					</f:facet>
+
+					</p:dataTable>
+
+			<p:dataTable id="pdisp" var="_pdisp" value="#{usuarioBean.puestosDisponibles}" selectionMode="multiple"
+						 selection="#{usuarioBean.puestosSeleccionadosAgregar}" emptyMessage="No existen datos a mostrar." 
+						 rows="10" editable="true" style="text-align: center;" reflow="true" rowKey="#{_pdisp.id}">
+
+					<f:facet name="header">
+						<p class="text-muted">Puestos disponibles</p>
+					</f:facet>
+
+					<p:column width="50" selectionMode="multiple" />
+
+					<p:column headerText="Id">
+						<h:outputText value="#{pdisp.id}" />
+					</p:column>
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{pdisp.nombre}" />
+					</p:column>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{pdisp.descripcion}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton process="pdisp" action="#{usuarioBean.agregarPuestosAlUsuario()}"
+										 icon="ui-icon-search" value="Quitar" update=":form:pdisp :form:pAsig"/>
+					</f:facet>
+
+			</p:dataTable>
+       </div>
+       
+       <div id="loadPass" class="collapse">
+<!--        		<label for="rpass1">Contraseña : </label> -->
+<!-- 			<p:password id="rpass1" value="#{newUsuario.password}" required="true" match="rpass2" validatorMessage="Error de validación, las contraseñas no coinciden"/>		 -->
+
+<!-- 			<label for="rpass2">Contraseña : </label> -->
+<!-- 			<p:password id="rpass2" value="#{newUsuario.password}" required="true" /> -->
+       </div>
+          
+		</h:form>     
+   </ui:define>
 </ui:composition>
