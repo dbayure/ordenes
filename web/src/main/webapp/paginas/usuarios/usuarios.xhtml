@@ -6,7 +6,7 @@
    xmlns:p="http://primefaces.org/ui"
    template="/WEB-INF/templates/default.xhtml">
    <ui:define name="content">
-    <h3 class="text-muted">Administar Puestos</h3>
+    <h3 class="text-muted">Administar Usuarios</h3>
 	<br />
 	<hr color="#0080ff" size="1" />
 	
@@ -24,7 +24,7 @@
          <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
          
          <div class="ui-fluid">
-   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   			<p:panelGrid id="usr" columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
    						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
 					
 					<label for="nombre">Nombre : *</label>	
@@ -57,7 +57,8 @@
 					</p:selectOneMenu>
 				
         			<label for="nombre"></label>
-        			<p:commandButton id="register" action="#{usuarioBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus"/>
+        			<p:commandButton id="register" action="#{usuarioBean.registrar}" value="Registrar" 
+        							 process="usr" update="form" icon="ui-icon-plus"/>
 								 					 								
 				</p:panelGrid>
 				
@@ -138,13 +139,23 @@
             	</p:cellEditor>  
            	 </p:column>  
            	 
+           	 <p:column headerText="Teléfono" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_usr.telefono}" />
+                	</f:facet>  
+                	<f:facet name="input">
+			           	 <p:inputMask id="tel" value="#{newUsuario.telefono}" mask="(999) 99-999999"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
            	 <p:column headerText="Rol" style="text-transform: capitalize;">  
         	    <p:cellEditor>  
                		<f:facet name="output">
-                		<h:outputText value="#{_usr.rol.descripcion}" />
+                		<h:outputText value="#{_usr.rol.rol}" />
                 	</f:facet>  
                 	<f:facet name="input">
-                		<p:selectOneMenu id="roles" value="#{newUsuario.rol}" required="true" requiredMessage="Campo requerido, debe ingresar un valor para el rol">
+                		<p:selectOneMenu id="rroles" value="#{newUsuario.rol}" required="true" requiredMessage="Campo requerido, debe ingresar un valor para el rol">
 							<f:converter converterId="rolConverter" />
 							<f:selectItem itemLabel="Seleccione..." itemValue="" />
 							<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />

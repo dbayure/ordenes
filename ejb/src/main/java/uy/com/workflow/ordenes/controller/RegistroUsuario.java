@@ -43,35 +43,22 @@ public class RegistroUsuario {
 	   public Usuario getNewUsuario() {
 	      return newUsuario;
 	   }
-
-//	   public void registro() throws Exception {
-//	      log.info("Registro " + newUsuario.getNombre());
-//	      newUsuario.setPuestos(newUsuario.getPuestos());
-//	      Set<Usuario> usuarios = new HashSet<Usuario>();
-//	      usuarios.add(newUsuario);
-//	      for (Puesto puesto : newUsuario.getPuestos()) {
-//			puesto.setUsuarios(usuarios);
-//	      }
-//	      em.persist(newUsuario);
-//	      usuarioEventSrc.fire(newUsuario);
-//	      initNewUsuario();
-//	   }
 	   
-	   public void registro() throws Exception{
-		Set<Usuario> usuarios = new HashSet<Usuario>();
-		Set<Puesto> puestos = new HashSet<Puesto>();
-		Usuario usuario = new Usuario();
-		usuario = newUsuario;
-		usuarios.add(usuario);
-		for (Puesto p : newUsuario.getPuestos()) {
-			Puesto puesto = em.find(Puesto.class, p.getId());
-			puesto.getUsuarios().add(usuario);
-			puestos.add(puesto);
-		}
-		usuario.setPuestos(puestos);
-		em.persist(usuario);
+	   public void registro() throws Exception {
+	      log.info("Registro " + newUsuario.getNombre());
+	      Set<Puesto> puestos = new HashSet<Puesto>();
+	      for (Puesto p : newUsuario.getPuestos()) {
+	    	  Puesto puesto = new Puesto();
+	    	  puesto = p;
+	    	  puesto.getUsuarios().add(newUsuario);
+	    	  puestos.add(puesto);
+	      }
+	      newUsuario.getPuestos().addAll(puestos);
+	      em.persist(newUsuario);
+	      usuarioEventSrc.fire(newUsuario);
+	      initNewUsuario();
 	   }
-	   
+	  	   
 	   public void modificar(Usuario usuario) throws Exception {
 		   log.info("Modifico " + usuario);
 		   em.merge(usuario);
@@ -89,7 +76,7 @@ public class RegistroUsuario {
 		   Usuario usuario = em.find(Usuario.class, id);
 		   return usuario;
 	   }
-	   
+	   	   
 	   @PostConstruct
 	   public void initNewUsuario() {
 		   newUsuario = new Usuario();

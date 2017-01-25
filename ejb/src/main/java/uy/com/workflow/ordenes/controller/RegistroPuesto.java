@@ -1,5 +1,7 @@
 package uy.com.workflow.ordenes.controller;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +14,8 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import uy.com.workflow.ordenes.model.Puesto;
+import uy.com.workflow.ordenes.model.Tarea;
+import uy.com.workflow.ordenes.model.Usuario;
 
 
 @Stateful
@@ -37,6 +41,20 @@ public class RegistroPuesto {
 
 	   public void registro() throws Exception {
 	      log.info("Registro " + newPuesto.getDescripcion());
+	      Set<Tarea> tareas = new HashSet<Tarea>();
+	      Set<Usuario> usuarios = new HashSet<Usuario>();
+	      for (Tarea tarea : newPuesto.getTareas()) {
+	    	  Tarea t = new Tarea();
+	    	  t = tarea;
+	    	  tareas.add(t);
+	      }
+	      for (Usuario usuario : newPuesto.getUsuarios()) {
+	    	  Usuario u = new Usuario();
+	    	  u = usuario;
+	    	  usuarios.add(u);
+	      }
+	      newPuesto.setTareas(tareas);
+	      newPuesto.setUsuarios(usuarios);
 	      em.persist(newPuesto);
 	      usuarioEventSrc.fire(newPuesto);
 	      initNewPuesto();

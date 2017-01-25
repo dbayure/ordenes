@@ -24,26 +24,75 @@
          <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
          
          <div class="ui-fluid">
-   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   			  <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
    						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
 					
-					<label for="nombre">Nombre : *</label>	
-					<p:inputText id="nombre" value="#{newPuesto.nombre}" label="nombre" required="true" 
+					<label>Nombre : *</label>	
+					<p:inputText id="nombre" value="#{newPuesto.nombre}" required="true" 
 								 requiredMessage="Debe ingresar un valor para el nombre" maxlength="250"/>
 								 
-					<label for="nombre">Descripción : </label>
-					<p:inputText id="desc" value="#{newPuesto.descripcion}" label="descripcion" 
-								 required="false" maxlength="250"/>	
+					<label>Descripción : </label>
+					<p:inputText id="desc" value="#{newPuesto.descripcion}" required="false" maxlength="250"/>	
+
+					<label></label>
+					<p:commandButton id="register" action="#{puestoBean.registrar}" value="Registrar" 
+									 update="form" icon="ui-icon-plus"/>								 
 								 
 				</p:panelGrid>
 				
-				<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"	
-							 columnClasses="ui-grid-col-10,ui-grid-col-2">
-					<label for="nombre"></label>
-					
-					<p:commandButton id="register" action="#{puestoBean.registrar}" value="Registrar" 
-									 update="form" icon="ui-icon-plus"/>
-				</p:panelGrid>
+				<br />
+				<hr color="#0080ff" size="1" />
+				
+				<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#asigTareas">
+						<i class="fa fa-plus-circle" aria-hidden="true"></i> Tareas
+					</button>
+					<div id="asigTareas" class="collapse">
+						<h3 class="text-muted">Asignar tareas al puesto</h3>
+						<br />
+						<hr color="#0080ff" size="1" />
+       					<p:panelGrid id="asigTarea" columns="2" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 			 columnClasses="ui-grid-col-2,ui-grid-col-4">
+							<label>Tareas : </label>
+							<p:selectManyMenu id="tareas" value="#{newPuesto.tareas}" 
+											  var="_t" filter="true" filterMatchMode="contains" showCheckbox="true">
+								<f:converter converterId="tareaConverter" />
+								<f:selectItems value="#{tareas}" var="_t" itemLabel="#{_t.descripcion}" itemValue="#{_t}"/> 
+		            			<p:column>
+		                			<i class="fa fa-desktop" aria-hidden="true"></i>
+		            			</p:column>
+		 
+		            			<p:column>
+		                			<h:outputText value="#{_t.descripcion}" />
+		            			</p:column>
+		        			</p:selectManyMenu>
+		        		</p:panelGrid>
+	        		</div>
+	        		
+	        		<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#asigUsr	">
+						<i class="fa fa-plus-circle" aria-hidden="true"></i> Usuarios
+					</button>
+					<div id="asigUsr" class="collapse">
+						<h3 class="text-muted">Asignar usuarios al puesto</h3>
+						<br />
+						<hr color="#0080ff" size="1" />
+       					<p:panelGrid id="asigUsr" columns="2" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 			 columnClasses="ui-grid-col-2,ui-grid-col-4">
+							<label>Usuarios : </label>
+							<p:selectManyMenu id="users" value="#{newPuesto.usuarios}" 
+											  var="_u" filter="true" filterMatchMode="contains" showCheckbox="true">
+								<f:converter converterId="usuarioConverter" />
+								<f:selectItems value="#{usuarios}" var="_u" itemLabel="#{_u.nombre}" itemValue="#{_u}"/> 
+		            			<p:column>
+		                			<i class="fa fa-desktop" aria-hidden="true"></i>
+		            			</p:column>
+		 
+		            			<p:column>
+		                			<h:outputText value="#{_u.nombre}" />
+		            			</p:column>
+		        			</p:selectManyMenu>
+		        		</p:panelGrid>
+	        		</div>
+				
 			</div>
 			
         <hr color="#0080ff" size="1" />

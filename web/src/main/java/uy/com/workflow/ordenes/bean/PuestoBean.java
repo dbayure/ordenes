@@ -84,12 +84,6 @@ public class PuestoBean {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
             	    Puesto puesto = (Puesto) d.getRowData();
-            	    if ( event.getRowIndex() == 3){
-            	    	puesto.setDescripcion(newValue.toString());
-            	    }
-            	    else{
-            	    	puesto.setNombre(newValue.toString());
-            	    }
             	    registroPuesto.modificar(puesto);
                 }
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El puesto fue modificado exitosamente" , "");  

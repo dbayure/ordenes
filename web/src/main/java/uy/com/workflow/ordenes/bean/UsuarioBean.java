@@ -1,10 +1,12 @@
 package uy.com.workflow.ordenes.bean;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -15,6 +17,7 @@ import org.primefaces.event.SelectEvent;
 
 import uy.com.workflow.ordenes.controller.RegistroUsuario;
 import uy.com.workflow.ordenes.model.Puesto;
+import uy.com.workflow.ordenes.model.Rol;
 import uy.com.workflow.ordenes.model.Usuario;
 
 
@@ -52,9 +55,7 @@ public class UsuarioBean {
 	}
 
 	public void setUsrSeleccionado(Usuario usr) {
-		System.out.println("Se selcciona el usuario " + usr.getNombre());
 		this.usrSeleccionado = usr;
-		System.out.println("Usuario efectivo" + this.usrSeleccionado.getNombre());
 	}
 
 	public List<Puesto> getPuestosDisponibles() {
@@ -74,6 +75,12 @@ public class UsuarioBean {
 	}
 
 	public void registrar() {
+//		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+//		Map<String, String> parameterMap = (Map<String, String>) ec.getRequestParameterMap();
+//		for (Map.Entry<String, String> entry : parameterMap.entrySet())
+//		{
+//		    System.out.println(entry.getKey() + "/" + entry.getValue());
+//		}
 		try {
 			registroUsuario.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
@@ -136,18 +143,18 @@ public class UsuarioBean {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
             	    Usuario usr = (Usuario) d.getRowData();
-            	    if ( event.getRowIndex() == 3){
-            	    	usr.setNombre(newValue.toString());
-            	    }
-            	    else{
-            	    	usr.setUsuario(newValue.toString());
+            	    String columna = event.getColumn().getHeaderText();
+            	    if ( columna.equals("Rol")){   
+            	    	Rol rol = (Rol) newValue;
+            	    	usr.setRol(rol);
             	    }
             	    registroUsuario.modificar(usr);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El puesto fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El usuario fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el puesto", "");  
+				e.printStackTrace();
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al modificar el usuario", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
@@ -161,7 +168,6 @@ public class UsuarioBean {
 	 
 	public void generarListaPuestosAsignados(Long idUsuario){
 		List<Puesto> puestos = registroUsuario.cargarPuestos(idUsuario);
-		System.out.println(puestos.size() + " Cantidad de puestos que contiene el cliente " + idUsuario);
 		this.setPuestosAsignados(puestos);
 		for (Puesto p : puestos) {
 			System.out.println("Puesto: " + p.getNombre());
@@ -179,8 +185,6 @@ public class UsuarioBean {
 	}
 
 	public void agregarPuestosAlUsuario(){
-		System.out.println("Usuario seleciconado para agregar puestos  " + usrSeleccionado.getNombre());
-		System.out.println("Cantidad de puestos a agregar al usuario seleccionado " + puestosSeleccionadosAgregar.size());
 		registroUsuario.agregarListaPuestosAlUsuario(usrSeleccionado.getId(), puestosSeleccionadosAgregar);
 		generarListaPuestosDisponibles(usrSeleccionado.getId());
 		generarListaPuestosAsignados(usrSeleccionado.getId());
