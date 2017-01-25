@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+    <h3 class="text-muted">Administar Tipo de Notificación</h3>
+	<br />
+	<hr color="#0080ff" size="1" />
+	
+      <h:form id="form" prependId="false">
+      
+      	<p:growl id="msgs" showDetail="false" />
+				
+		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		     <h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		     </h:panelGrid>   
+		    </p:confirmDialog>
+         
+         <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
+         
+         <div class="ui-fluid">
+   			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+					
+					<label for="nombre">Nombre : *</label>	
+					<p:inputText id="nombre" value="#{newTipoNotificacion.nombre}" label="nombre" required="true" 
+								 requiredMessage="Debe ingresar un valor para el nombre" maxlength="250"/>
+								 
+					<label for="nombre">Descripción : </label>
+					<p:inputText id="desc" value="#{newTipoNotificacion.descripcion}" label="descripcion" 
+								 required="false" maxlength="250"/>	
+								 
+					<label for="nombre"></label>	
+					<p:commandButton id="register" action="#{tipoNotificacionBean.registrar}" value="Registrar" 
+									 update="form" icon="ui-icon-plus"/>							 
+								 
+				</p:panelGrid>
+				
+			</div>
+			
+        <hr color="#0080ff" size="1" />
+
+       	 <p:dataTable id="tnotif" var="_tn" value="#{tiposNotificacion}" editable="true" style="text-align:center" 
+       	 			  editMode="cell" reflow="true"	emptyMessage="No existen datos a mostrar." sortBy="#{_tn.id}" >
+       	 			  
+       		<f:facet name="header">  
+            	<p class="text-muted">Tipos de notificaciones</p>
+        	</f:facet>
+        	
+        	<p:ajax event="cellEdit" listener="#{tipoNotificacionBean.onCellEdit}" update=":form:messages"/>
+        	 
+        	 <p:column headerText="Id" style="text-transform: capitalize; width:10%">
+        	 	<h:outputText value="#{_tn.id}" />
+        	 </p:column>
+        	 
+        	 <p:column headerText="Nombre" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_tn.nombre}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputNombre" value="#{_tn.nombre}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+        	 <p:column headerText="Descripción" style="text-transform: capitalize;">  
+        	    <p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_tn.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:inputText id="modelInputDesc" value="#{_tn.descripcion}" required="true"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+
+	      	<p:column headerText="Eliminar" style="text-transform: capitalize;">
+		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        				  actionListener="#{tipoNotificacionBean.eliminar(_tn.id)}">
+		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el tipo de notificación" icon="ui-icon-alert" />
+		     	</p:commandButton>	        	
+		    </p:column>
+		    
+       </p:dataTable>       
+        
+		</h:form>     
+   </ui:define>
+</ui:composition>

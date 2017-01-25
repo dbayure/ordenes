@@ -80,6 +80,7 @@ public class NotificacionBean {
 	public void onCellEdit(CellEditEvent event) {  
 		Object oldValue = event.getOldValue();
 	    Object newValue = event.getNewValue();
+	    System.out.println("indice " + event.getRowIndex());
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();

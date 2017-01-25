@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -19,7 +19,7 @@ import uy.com.workflow.ordenes.model.Usuario;
 
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class UsuarioBean {
 
 	@Inject
@@ -51,8 +51,10 @@ public class UsuarioBean {
 		return usrSeleccionado;
 	}
 
-	public void setUsrSeleccionado(Usuario usrSeleccionado) {
-		this.usrSeleccionado = usrSeleccionado;
+	public void setUsrSeleccionado(Usuario usr) {
+		System.out.println("Se selcciona el usuario " + usr.getNombre());
+		this.usrSeleccionado = usr;
+		System.out.println("Usuario efectivo" + this.usrSeleccionado.getNombre());
 	}
 
 	public List<Puesto> getPuestosDisponibles() {
@@ -168,6 +170,8 @@ public class UsuarioBean {
 	
 	public void quitarPuestosAlUsuario(){
 		registroUsuario.quitarPuestosAlUsuario(usrSeleccionado.getId(), puestosSeleccionadosQuitar);
+		generarListaPuestosDisponibles(usrSeleccionado.getId());
+		generarListaPuestosAsignados(usrSeleccionado.getId());
 	}
 	
 	public void generarListaPuestosDisponibles(Long idUsuario){
@@ -175,6 +179,18 @@ public class UsuarioBean {
 	}
 
 	public void agregarPuestosAlUsuario(){
+		System.out.println("Usuario seleciconado para agregar puestos  " + usrSeleccionado.getNombre());
+		System.out.println("Cantidad de puestos a agregar al usuario seleccionado " + puestosSeleccionadosAgregar.size());
 		registroUsuario.agregarListaPuestosAlUsuario(usrSeleccionado.getId(), puestosSeleccionadosAgregar);
+		generarListaPuestosDisponibles(usrSeleccionado.getId());
+		generarListaPuestosAsignados(usrSeleccionado.getId());
+	}
+	
+	public void cambiarContraseña(){
+		if (usrSeleccionado == null){
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un usuario para poder cambiar su contraseña" , "");  
+            FacesContext.getCurrentInstance().addMessage(null, msg); 
+		}
+		registroUsuario.cambiarContraseña(usrSeleccionado.getId());
 	}
 }

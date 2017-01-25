@@ -56,24 +56,35 @@
 						<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />
 					</p:selectOneMenu>
 				
-					<label for="rol">Puestos : </label>
-					<p:selectManyMenu id="puestos" value="#{newUsuario.puestos}" 
-									  var="_p" filter="true" filterMatchMode="contains" showCheckbox="true">
-						<f:converter converterId="puestoConverter" />
-						<f:selectItems value="#{puestos}" var="_p" itemLabel="#{_p.nombre}" itemValue="#{_p}"/> 
-            			<p:column>
-                			<i class="fa fa-desktop" aria-hidden="true"></i>
-            			</p:column>
- 
-            			<p:column>
-                			<h:outputText value="#{_p.nombre}" />
-            			</p:column>
-        			</p:selectManyMenu>
-        			
         			<label for="nombre"></label>
         			<p:commandButton id="register" action="#{usuarioBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus"/>
 								 					 								
 				</p:panelGrid>
+				
+				<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#asigPuestos">
+						<i class="fa fa-plus-circle" aria-hidden="true"></i> Puestos
+					</button>
+					<div id="asigPuestos" class="collapse">
+						<h3 class="text-muted">Asignar puestos al usuario</h3>
+						<br />
+						<hr color="#0080ff" size="1" />
+       					<p:panelGrid id="asigPuesto" columns="2" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 			 columnClasses="ui-grid-col-2,ui-grid-col-4">
+							<label for="rol">Puestos : </label>
+							<p:selectManyMenu id="puestos" value="#{newUsuario.puestos}" 
+											  var="_p" filter="true" filterMatchMode="contains" showCheckbox="true">
+								<f:converter converterId="puestoConverter" />
+								<f:selectItems value="#{puestos}" var="_p" itemLabel="#{_p.nombre}" itemValue="#{_p}"/> 
+		            			<p:column>
+		                			<i class="fa fa-desktop" aria-hidden="true"></i>
+		            			</p:column>
+		 
+		            			<p:column>
+		                			<h:outputText value="#{_p.nombre}" />
+		            			</p:column>
+		        			</p:selectManyMenu>
+		        		</p:panelGrid>
+	        		</div>
 				
 			</div>
 			
@@ -151,20 +162,23 @@
 		    
 		    <f:facet name="footer">
             	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#loadPuestos">
-					<i class="fa fa-picture-o" aria-hidden="true"></i> Puestos
+					<i class="fa fa-desktop" aria-hidden="true"></i> Puestos
 				</button>
         	</f:facet>
         	
         	<f:facet name="footer">
             	<button type="button" class="btn btn-success" data-toggle="collapse" data-target="#loadPass">
-					<i class="fa fa-picture-o" aria-hidden="true"></i> Contraseña
+					<i class="fa fa-key" aria-hidden="true"></i> Contraseña
 				</button>
         	</f:facet>
 		    
        </p:dataTable>      
        
        <div id="loadPuestos" class="collapse">
-       		<p:dataTable id="pAsig" var="_pasig" value="#{usuarioBean.puestosAsignados}" selectionMode="multiple"
+            <h3 class="text-muted">Asignar puestos a usuarios</h3>
+			<br />
+			<hr color="#0080ff" size="1" />
+       		<p:dataTable id="pAsig" var="_pasig" value="#{usuarioBean.puestosAsignados}" sortBy="#{_pasig.id}"
        					 selection="#{usuarioBean.puestosSeleccionadosQuitar}" emptyMessage="No existen datos a mostrar." rows="10"
 						 editable="true" style="text-align: center;" reflow="true" rowKey="#{_pasig.id}">
 
@@ -187,15 +201,15 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton process="pAsig" value="Agregar" action="#{usuarioBean.quitarPuestosAlUsuario()}"
+						<p:commandButton process="pAsig" value="Quitar" action="#{usuarioBean.quitarPuestosAlUsuario()}"
 										 icon="ui-icon-search" update=":form:pdisp :form:pAsig"/>
 					</f:facet>
 
 					</p:dataTable>
 
-			<p:dataTable id="pdisp" var="_pdisp" value="#{usuarioBean.puestosDisponibles}" selectionMode="multiple"
+			<p:dataTable id="pdisp" var="_pdisp" value="#{usuarioBean.puestosDisponibles}"  sortBy="#{_pdisp.id}"
 						 selection="#{usuarioBean.puestosSeleccionadosAgregar}" emptyMessage="No existen datos a mostrar." 
-						 rows="10" editable="true" style="text-align: center;" reflow="true" rowKey="#{_pdisp.id}">
+						 editable="true" style="text-align: center;" reflow="true" rowKey="#{_pdisp.id}">
 
 					<f:facet name="header">
 						<p class="text-muted">Puestos disponibles</p>
@@ -204,31 +218,43 @@
 					<p:column width="50" selectionMode="multiple" />
 
 					<p:column headerText="Id">
-						<h:outputText value="#{pdisp.id}" />
+						<h:outputText value="#{_pdisp.id}" />
 					</p:column>
 
 					<p:column headerText="Nombre">
-						<h:outputText value="#{pdisp.nombre}" />
+						<h:outputText value="#{_pdisp.nombre}" />
 					</p:column>
 
 					<p:column headerText="Descripción">
-						<h:outputText value="#{pdisp.descripcion}" />
+						<h:outputText value="#{_pdisp.descripcion}" />
 					</p:column>
 
 					<f:facet name="footer">
 						<p:commandButton process="pdisp" action="#{usuarioBean.agregarPuestosAlUsuario()}"
-										 icon="ui-icon-search" value="Quitar" update=":form:pdisp :form:pAsig"/>
+										 icon="ui-icon-search" value="Agregar" update=":form:pdisp :form:pAsig"/>
 					</f:facet>
 
 			</p:dataTable>
        </div>
        
        <div id="loadPass" class="collapse">
-<!--        		<label for="rpass1">Contraseña : </label> -->
-<!-- 			<p:password id="rpass1" value="#{newUsuario.password}" required="true" match="rpass2" validatorMessage="Error de validación, las contraseñas no coinciden"/>		 -->
-
-<!-- 			<label for="rpass2">Contraseña : </label> -->
-<!-- 			<p:password id="rpass2" value="#{newUsuario.password}" required="true" /> -->
+       		<h3 class="text-muted">Cambiar contraseña</h3>
+			<br />
+            <p:messages id="mesgPass" showDetail="true" autoUpdate="true" closable="true" />   
+			<hr color="#0080ff" size="1" />
+       		<p:panelGrid id="cambiarContraseña" columns="2" layout="grid" styleClass="ui-panelgrid-blank" 
+   						 columnClasses="ui-grid-col-2,ui-grid-col-4">
+   						 
+	       		<label for="rpass1">Contraseña : </label>
+				<p:password id="rpass1" value="#{newUsuario.password}" required="true" match="rpass2" validatorMessage="Error de validación, las contraseñas no coinciden" />		
+	
+				<label for="rpass2">Contraseña : </label>
+				<p:password id="rpass2" value="#{newUsuario.password}" required="true" />
+				
+				<label for="rpass1"> </label>
+				<p:commandButton action="#{usuarioBean.cambiarContraseña()}" icon="ui-icon-search" value="Modificar" process="cambiarContraseña" update="mesgPass"/>
+			
+			</p:panelGrid>
        </div>
           
 		</h:form>     

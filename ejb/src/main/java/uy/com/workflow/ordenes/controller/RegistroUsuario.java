@@ -103,8 +103,15 @@ public class RegistroUsuario {
 	   }
 	   
 	   public void quitarPuestosAlUsuario(Long idUsuario, List<Puesto> puestos){
-		   Usuario usuario = em.find(Usuario.class, idUsuario);
-		   usuario.getPuestos().removeAll(puestos);
+		   Usuario usuario = new Usuario(); 
+		   usuario = em.find(Usuario.class, idUsuario);
+		   for (Puesto puesto : puestos) {
+			   Puesto p = new Puesto();
+			   p = em.find(Puesto.class, puesto.getId());
+			   p.getUsuarios().remove(usuario);
+			   usuario.getPuestos().remove(p);
+		   }
+		   em.merge(usuario);
 	   }
 	   
 	   public List<Puesto> generarListaPuestosDisponibles(Long idUsuario){
@@ -113,13 +120,14 @@ public class RegistroUsuario {
 		   List<Puesto> puestos = plp.getPuestos();
 		   List<Puesto> disponibles = new ArrayList<Puesto>();
 		   for (Puesto puesto : puestos) {
-			   boolean agregar = false;
+			   boolean agregar = true;
 				for (Puesto pu : puestosUsuario) {
-					if(puesto.getId() != pu.getId()){
-						agregar = true;
+					if(puesto.getId() == pu.getId()){
+						agregar = false;
 					}
 				}
-				if (agregar){
+				if (agregar == true){
+					System.out.println("Agrego el puesto: " + puesto.getDescripcion() + " a la lista de puestos disponibles");
 					disponibles.add(puesto);
 				}
 		   }
@@ -127,9 +135,20 @@ public class RegistroUsuario {
 	   }
 	   
 	   public void agregarListaPuestosAlUsuario(Long idUsuario, List<Puesto> puestos){
-		   Usuario usuario = em.find(Usuario.class, idUsuario);
+		   Usuario usuario = new Usuario(); 
+		   usuario = em.find(Usuario.class, idUsuario);
+		   usuario.getPuestos().addAll(puestos);
 		   for (Puesto puesto : puestos) {
-			   usuario.getPuestos().add(puesto);
+			   puesto.getUsuarios().add(usuario);
 		   }
+		   em.merge(usuario);
+	   }
+	   
+	   public void cambiarContraseña(Long idUsuario){
+		   Usuario u = new Usuario();
+		   u = em.find(Usuario.class, idUsuario);
+		   System.out.println("usuario :" +  u.getNombre() + " contraseña actual " + u.getPassword() + " contraseña nueva " + newUsuario.getPassword());
+		   u.setPassword(newUsuario.getPassword());
+		   em.merge(u);
 	   }
 }

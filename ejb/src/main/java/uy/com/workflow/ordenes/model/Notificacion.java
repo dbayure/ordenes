@@ -101,11 +101,8 @@ public class Notificacion implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((tarea == null) ? 0 : tarea.hashCode());
-		result = prime * result + ((tipoNotificacion == null) ? 0 : tipoNotificacion.hashCode());
 		return result;
 	}
 
@@ -123,11 +120,6 @@ public class Notificacion implements Serializable {
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
 			return false;
-		if (estado == null) {
-			if (other.estado != null)
-				return false;
-		} else if (!estado.equals(other.estado))
-			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
 				return false;
@@ -138,17 +130,8 @@ public class Notificacion implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (tarea == null) {
-			if (other.tarea != null)
-				return false;
-		} else if (!tarea.equals(other.tarea))
-			return false;
-		if (tipoNotificacion == null) {
-			if (other.tipoNotificacion != null)
-				return false;
-		} else if (!tipoNotificacion.equals(other.tipoNotificacion))
-			return false;
 		return true;
 	}
+
 	
 }

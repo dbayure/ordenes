@@ -11,7 +11,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import uy.com.workflow.ordenes.model.Estado;
 import uy.com.workflow.ordenes.model.Notificacion;
+import uy.com.workflow.ordenes.model.Tarea;
+import uy.com.workflow.ordenes.model.TipoNotificacion;
 
 
 @Stateful
@@ -37,6 +40,16 @@ public class RegistroNotificacion {
 
 	   public void registro() throws Exception {
 	      log.info("Registro " + newNotificacion.getDescripcion());
+	      Tarea tarea = new Tarea();
+	      Estado estado = new Estado();
+	      TipoNotificacion tn = new TipoNotificacion();
+	      estado = em.find(Estado.class, newNotificacion.getEstado().getId());
+	      tn = em.find(TipoNotificacion.class, newNotificacion.getTipoNotificacion().getId());
+	      tarea = em.find(Tarea.class, newNotificacion.getTarea().getId());
+	      tarea.getNotificaciones().add(newNotificacion);
+	      newNotificacion.setTarea(tarea);
+	      newNotificacion.setEstado(estado);
+	      newNotificacion.setTipoNotificacion(tn);
 	      em.persist(newNotificacion);
 	      notificacionEventSrc.fire(newNotificacion);
 	      initNewNotificacion();
@@ -50,6 +63,8 @@ public class RegistroNotificacion {
 	   public void eliminar(Long id) throws Exception {
 		   log.info("Elimino " + id);
 		   Notificacion notificacion = em.find(Notificacion.class, id);
+		   Tarea tarea = em.find(Tarea.class, notificacion.getTarea().getId());
+		   tarea.getNotificaciones().remove(notificacion);
 		   em.remove(notificacion);
 		   notificacionEventSrc.fire(newNotificacion);
 	   }

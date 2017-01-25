@@ -34,7 +34,6 @@ public class TipoNotificacionResourceRESTService {
    public List<TipoNotificacion> listAll() {
       // Use @SupressWarnings to force IDE to ignore warnings about "genericizing" the results of
       // this query
-      @SuppressWarnings("unchecked")
       // We recommend centralizing inline queries such as this one into @NamedQuery annotations on
       // the @Entity class
       // as described in the named query blueprint:

@@ -28,7 +28,7 @@ public class TipoNotificacionConverter implements Converter {
 			ObjectMapper mapper = new ObjectMapper();	
 			tipoNotificacion = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/tipoNotificacions/" + value), TipoNotificacion.class);
+					+ "/rest/tiposNotificacion/" + value), TipoNotificacion.class);
 		}
 		catch(Exception e) {
 			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "TipoNotificacion no válido"));

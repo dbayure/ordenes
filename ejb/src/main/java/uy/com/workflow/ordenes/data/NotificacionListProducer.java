@@ -42,7 +42,7 @@ public class NotificacionListProducer {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Notificacion> criteria = cb.createQuery(Notificacion.class);
       Root<Notificacion> notificacion = criteria.from(Notificacion.class);
-      criteria.select(notificacion).orderBy(cb.asc(notificacion.get("notificacion")));
+      criteria.select(notificacion).orderBy(cb.asc(notificacion.get("descripcion")));
       notificaciones = em.createQuery(criteria).getResultList();
    }
 }

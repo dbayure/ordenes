@@ -21,49 +21,50 @@
 		     </h:panelGrid>   
 		    </p:confirmDialog>
          
-         <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />   
+         <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
          
          <div class="ui-fluid">
    			<p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank" 
    						 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
 											 
-					<label for="nombre">Descripción : </label>
+					<label>Descripción : </label>
 					<p:inputText id="desc" value="#{newNotificacion.descripcion}" label="descripcion" 
 								 required="false" maxlength="250"/>	
 								 
-					<label for="fecha">Fecha : </label>
+					<label>Fecha : </label>
 			        <p:calendar id="fecha" value="#{newNotificacion.fecha}"/>
 					
 					<label>Tarea: </label>
 					<p:selectOneMenu id="tarea" value="#{newNotificacion.tarea}"
-						required="true"	requiredMessage="Debe ingresar un valor para la tarea"
-						style="vertical-align:middle;">
+									 required="true" requiredMessage="Debe ingresar un valor para la tarea"
+									 style="vertical-align:middle;">
 						<f:converter converterId="tareaConverter" />
 						<f:selectItem itemLabel="Seleccione..." itemValue="" />
 						<f:selectItems value="#{tareas}" var="tar"
-							itemLabel="#{tar.descripcion}" itemValue="#{tar}" />
+									   itemLabel="#{tar.descripcion}" itemValue="#{tar}" />
 					</p:selectOneMenu>
 					
 					<label>Estado: </label>
 					<p:selectOneMenu id="estado" value="#{newNotificacion.estado}"
-						required="true"	requiredMessage="Debe ingresar un valor para el estado"
-						style="vertical-align:middle;">
+									 required="true" requiredMessage="Debe ingresar un valor para el estado"
+									 style="vertical-align:middle;">
 						<f:converter converterId="estadoConverter" />
 						<f:selectItem itemLabel="Seleccione..." itemValue="" />
 						<f:selectItems value="#{estados}" var="est"
-							itemLabel="#{est.nombre}" itemValue="#{est}" />
+									   itemLabel="#{est.nombre}" itemValue="#{est}" />
 					</p:selectOneMenu>
 					
 					<label>Tipo: </label>
 					<p:selectOneMenu id="tipo" value="#{newNotificacion.tipoNotificacion}"
-						required="true"	requiredMessage="Debe ingresar un valor para el tipo de notificación"
-						style="vertical-align:middle;">
+									 required="true" requiredMessage="Debe ingresar un valor para el tipo de notificación"
+									 style="vertical-align:middle;">
 						<f:converter converterId="tipoNotificacionConverter" />
 						<f:selectItem itemLabel="Seleccione..." itemValue="" />
 						<f:selectItems value="#{tiposNotificacion}" var="tn"
-							itemLabel="#{tn.nombre}" itemValue="#{tn}" />
+									   itemLabel="#{tn.nombre}" itemValue="#{tn}" />
 					</p:selectOneMenu>
 					
+					<label></label>
 					<p:commandButton id="register" action="#{notificacionBean.registrar}" value="Registrar" 
 									 update="form" icon="ui-icon-plus"/>
 				</p:panelGrid>
@@ -95,23 +96,77 @@
             	</p:cellEditor>  
            	 </p:column>  
            	 
-        	 <p:column headerText="Descripción" style="text-transform: capitalize;">  
+        	 <p:column headerText="Fecha" style="text-transform: capitalize;">  
         	    <p:cellEditor>  
                		<f:facet name="output">
-                		<h:outputText value="#{_puesto.descripcion}" />
+                		<h:outputText value="#{_noti.fecha}" />
                 	</f:facet>  
                 	<f:facet name="input">
-                		<p:inputText id="modelInputDesc" value="#{_puesto.descripcion}" required="true"/>
+                		<p:calendar id="modelInputFecha" value="#{newNotificacion.fecha}"/>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+           	 <p:column headerText="Tarea" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_noti.tarea.descripcion}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:selectOneMenu id="ModelImputTarea" value="#{newNotificacion.tarea}"
+									 	required="true" requiredMessage="Debe ingresar un valor para la tarea"
+									 	style="vertical-align:middle;">
+							<f:converter converterId="tareaConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{tareas}" var="tar"
+									   	   itemLabel="#{tar.descripcion}" itemValue="#{tar}" />
+						</p:selectOneMenu>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+           	 <p:column headerText="Estado" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_noti.estado.nombre}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:selectOneMenu id="ModelImputEstado" value="#{newNotificacion.estado}"
+									 	required="true" requiredMessage="Debe ingresar un valor para el estado"
+									 	style="vertical-align:middle;">
+							<f:converter converterId="estadoConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{estados}" var="est"
+									   	   itemLabel="#{est.nombre}" itemValue="#{est}" />
+						</p:selectOneMenu>
+                	</f:facet>  
+            	</p:cellEditor>  
+           	 </p:column>  
+           	 
+           	 <p:column headerText="Tipo" style="text-transform: capitalize;">  
+        	 	<p:cellEditor>  
+               		<f:facet name="output">
+                		<h:outputText value="#{_noti.tipoNotificacion.nombre}" />
+                	</f:facet>  
+                	<f:facet name="input">
+                		<p:selectOneMenu id="ModelImputTipo" value="#{newNotificacion.tipoNotificacion}"
+									 	required="true" requiredMessage="Debe ingresar un valor para el tipo de notificación"
+										 style="vertical-align:middle;">
+							<f:converter converterId="tipoNotificacionConverter" />
+							<f:selectItem itemLabel="Seleccione..." itemValue="" />
+							<f:selectItems value="#{tiposNotificacion}" var="tn"
+									   	   itemLabel="#{tn.nombre}" itemValue="#{tn}" />
+						</p:selectOneMenu>
                 	</f:facet>  
             	</p:cellEditor>  
            	 </p:column>  
 
-	      	<p:column headerText="Eliminar" style="text-transform: capitalize;">
-		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
-		        				  actionListener="#{puestoBean.eliminar(_puesto.id)}">
-		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el puesto" icon="ui-icon-alert" />
-		     	</p:commandButton>	        	
-		    </p:column>
+<!-- 	      	<p:column headerText="Eliminar" style="text-transform: capitalize;"> -->
+<!-- 		    	<p:commandButton  id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar" -->
+<!-- 		        				  actionListener="#{notificacionBean.eliminar(_noti.id)}"> -->
+<!-- 		        <p:confirm header="Confirmación" message="Esta seguro que desea eliminar el puesto" icon="ui-icon-alert" /> -->
+<!-- 		     	</p:commandButton>	        	 -->
+<!-- 		    </p:column> -->
 		    
        </p:dataTable>       
         
