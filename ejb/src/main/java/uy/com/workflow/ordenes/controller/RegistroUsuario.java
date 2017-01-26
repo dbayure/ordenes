@@ -1,7 +1,6 @@
 package uy.com.workflow.ordenes.controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -46,14 +45,6 @@ public class RegistroUsuario {
 	   
 	   public void registro() throws Exception {
 	      log.info("Registro " + newUsuario.getNombre());
-	      Set<Puesto> puestos = new HashSet<Puesto>();
-	      for (Puesto p : newUsuario.getPuestos()) {
-	    	  Puesto puesto = new Puesto();
-	    	  puesto = p;
-	    	  puesto.getUsuarios().add(newUsuario);
-	    	  puestos.add(puesto);
-	      }
-	      newUsuario.getPuestos().addAll(puestos);
 	      em.persist(newUsuario);
 	      usuarioEventSrc.fire(newUsuario);
 	      initNewUsuario();
@@ -67,6 +58,9 @@ public class RegistroUsuario {
 	   public void eliminar(Long id) throws Exception {
 		   log.info("Elimino " + id);
 		   Usuario usuario = em.find(Usuario.class, id);
+		   for (Puesto puesto : usuario.getPuestos()) {
+			   puesto.getUsuarios().remove(usuario);
+		   }
 		   em.remove(usuario);
 		   usuarioEventSrc.fire(newUsuario);
 	   }

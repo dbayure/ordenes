@@ -1,12 +1,10 @@
 package uy.com.workflow.ordenes.bean;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -46,8 +44,9 @@ public class UsuarioBean {
 		return puestosSeleccionadosAgregar;
 	}
 
-	public void setPuestosSeleccionadosAgregar(List<Puesto> puestosSeleccionadosAgregar) {
-		this.puestosSeleccionadosAgregar = puestosSeleccionadosAgregar;
+	public void setPuestosSeleccionadosAgregar(List<Puesto> puestosSeleccionados) {
+		System.out.println("Puestos que vienen de la vista " + puestosSeleccionados);
+		this.puestosSeleccionadosAgregar = puestosSeleccionados;
 	}
 
 	public Usuario getUsrSeleccionado() {
@@ -75,18 +74,13 @@ public class UsuarioBean {
 	}
 
 	public void registrar() {
-//		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//		Map<String, String> parameterMap = (Map<String, String>) ec.getRequestParameterMap();
-//		for (Map.Entry<String, String> entry : parameterMap.entrySet())
-//		{
-//		    System.out.println(entry.getKey() + "/" + entry.getValue());
-//		}
 		try {
 			registroUsuario.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		catch (Exception e) {
+		e.printStackTrace();
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
         FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}
@@ -195,6 +189,15 @@ public class UsuarioBean {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un usuario para poder cambiar su contraseña" , "");  
             FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}
-		registroUsuario.cambiarContraseña(usrSeleccionado.getId());
+		try{
+			registroUsuario.cambiarContraseña(usrSeleccionado.getId());
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La contraseña fue actualizada correctamente" , "");  
+            FacesContext.getCurrentInstance().addMessage(null, msg); 
+		}
+		catch(Exception e){
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No fue posible cambiar la cambiar su contraseña" , "");  
+            FacesContext.getCurrentInstance().addMessage(null, msg); 
+		}
+		
 	}
 }
